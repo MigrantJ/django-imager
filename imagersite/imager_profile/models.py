@@ -19,6 +19,12 @@ class ImagerProfile(models.Model):
                                   default='N')
     active = models.BooleanField()
 
+    def __str__(self):
+        return 'ImagerProfile: ' + self.user.username
+
+    def __unicode__(self):
+        return unicode('ImagerProfile: ' + self.user.username)
+
     @property
     def is_active(self):
         return self.active
