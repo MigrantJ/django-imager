@@ -3,6 +3,12 @@ from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
 
 
+class ActiveProfileManager(models.Manager):
+    def get_queryset(self):
+        return super(ActiveProfileManager, self).get_queryset()\
+            .filter(user__is_active=True)
+
+
 @python_2_unicode_compatible
 class ImagerProfile(models.Model):
     PHOTO_TYPES = (
@@ -32,9 +38,3 @@ class ImagerProfile(models.Model):
     @property
     def is_active(self):
         return self.user.is_active
-
-
-class ActiveProfileManager(models.Manager):
-    def get_queryset(self):
-        return super(ActiveProfileManager, self).get_queryset()\
-            .filter(user__is_active=True)
