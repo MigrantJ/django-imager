@@ -1,17 +1,27 @@
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
 
-from .models import ImagerProfile
+from .models import User, ImagerProfile
 
 
 @receiver(post_save)
 def create_user_profile(sender, **kwargs):
     instance = kwargs.get('instance')
-    instance.profile = ImagerProfile()
-    instance.profile.save()
+    if not instance or kwargs.get('raw', False):
+        return
+    try:
+        instance.profile
+    except:
+        instance.profile = ImagerProfile()
+        instance.profile.save()
 
 
 @receiver(post_delete)
 def del_user_profile(sender, **kwargs):
     instance = kwargs.get('instance')
-    instance.user.delete()
+    if not instance:
+        return
+    try:
+        instance.user.delete()
+    except:
+        pass
