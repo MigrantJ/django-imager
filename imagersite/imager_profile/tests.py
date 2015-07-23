@@ -3,17 +3,17 @@ import factory
 from . import models
 
 
-class UserFactory(factory.Factory):
+class UserFactory(factory.DjangoModelFactory):
     class Meta:
         model = models.User
 
-    first_name = 'John'
-    last_name = 'Doe'
+    username = 'person'
 
 
 class UserTests(TestCase):
 
+    def setUp(self):
+        self.testuser = UserFactory.create()
+
     def test_has_profile(self):
-        user = UserFactory.create()
-        user.save()
-        self.assertTrue(user.profile)
+        assert self.testuser.profile
