@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save, post_delete
+from django.utils.encoding import python_2_unicode_compatible
 
 
+@python_2_unicode_compatible
 class ImagerProfile(models.Model):
     PHOTO_TYPES = (
         ('N', 'Nature Photography'),
@@ -11,33 +12,29 @@ class ImagerProfile(models.Model):
         ('B', 'Black and White Photography'),
         ('F', 'Forensic Photography')
     )
-    user = models.OneToOneField(User, unique=True)
+    user = models.OneToOneField(
+        User,
+        related_name="profile",
+        null=False
+    )
     fav_camera = models.CharField(max_length=256)
-    address = models.CharField(max_length=256)
+    address = models.TextField()
     url = models.URLField()
     photo_type = models.CharField(max_length=1,
                                   choices=PHOTO_TYPES,
                                   default='N')
-    active = models.BooleanField()
+    objects = models.Manager()
+    active = ActiveProfileManager()
 
     def __str__(self):
-        return 'ImagerProfile: ' + self.user.username
-
-    def __unicode__(self):
-        return unicode('ImagerProfile: ' + self.user.username)
+        return self.user.get_full_name() or self.user.username
 
     @property
     def is_active(self):
-        return self.active
+        return self.user.is_active
 
 
-def create_user_profile(sender, instance, created, **kwargs):
-    if created:
-        ImagerProfile.objects.create(user=instance)
-
-
-def delete_user_profile(sender, instance, created, **kwargs):
-    pass
-
-post_save.connect(create_user_profile, sender=User)
-post_delete.connect(delete_user_profile, sender=User)
+class ActiveProfileManager(models.Manager):
+    def get_queryset(self):
+        return super(ActiveProfileManager, self).get_queryset()\
+            .filter(user__is_active=True)
