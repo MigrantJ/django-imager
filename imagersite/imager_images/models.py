@@ -20,7 +20,7 @@ class Photos(models.Model):
     date_modified = models.DateField(auto_now=True)
     date_published = models.DateField(auto_now_add=True)
 
-    published = models.CharField(max_length=1,
+    published = models.CharField(max_length=256,
                                  choices=PUBLISHED_CHOICES,
                                  default='private')
 
@@ -32,7 +32,8 @@ class Album(models.Model):
     )
     photos = models.ManyToManyField(
         Photos,
-        limit_choices_to={'user': user}
+        related_name='albums',
+        limit_choices_to=user
     )
     cover = models.ForeignKey(
         Photos,
@@ -43,6 +44,6 @@ class Album(models.Model):
     date_created = models.DateField(auto_now_add=True)
     date_modified = models.DateField(auto_now=True)
     date_published = models.DateField(auto_now_add=True)
-    published = models.CharField(max_length=1,
+    published = models.CharField(max_length=256,
                                  choices=PUBLISHED_CHOICES,
                                  default='private')
