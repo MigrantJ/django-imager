@@ -36,6 +36,7 @@ class Album(models.Model):
     )
     cover = models.ForeignKey(
         Photos,
+        related_name='cover_for'
     )
     title = models.CharField(max_length=256)
     description = models.TextField()
