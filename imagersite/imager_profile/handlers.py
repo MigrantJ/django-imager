@@ -11,7 +11,7 @@ def create_user_profile(sender, **kwargs):
         return
     try:
         instance.profile
-    except:
+    except ImagerProfile.DoesNotExist:
         instance.profile = ImagerProfile()
         instance.profile.save()
 
