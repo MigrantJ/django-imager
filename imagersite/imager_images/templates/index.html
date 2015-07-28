@@ -9,9 +9,4 @@
       <img src="http://picsportray.com/wp-content/uploads/2015/06/funny-dog-i-dunno-lol.jpg" alt="">
     {% endif %}
   </section>
-    {% if not user.is_authenticated %}
-  <aside class='signup'>
-    <a href="{% url 'registration_register' %}" title="Register">{% trans Register %}</a>
-  </aside>
-    {% endif %}
 {% endblock %}
