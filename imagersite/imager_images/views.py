@@ -7,7 +7,8 @@ class IndexView(TemplateView):
     template_name = 'index.html'
 
     def get(self, request, *args, **kwargs):
+        p = Photos.objects.filter(published='public').order_by('?').first()
         context = {
-            'photo': Photos.objects.filter(published='public').first()
+            'photo': p
         }
         return render(request, self.template_name, context=context)
