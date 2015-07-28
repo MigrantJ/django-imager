@@ -17,6 +17,16 @@ img {
   max-width: 100%
 }
 
+.login_form {
+  background-color: rgb(202, 202, 202);
+  border-radius: 1rem;
+  margin-left: 2%;
+}
+
+#id_password, #id_username {
+  max-width: 95%;
+}
+
 #content {
   display: flex;
 }
