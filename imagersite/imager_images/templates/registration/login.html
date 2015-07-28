@@ -6,7 +6,7 @@
   <img src="http://picsportray.com/wp-content/uploads/2015/06/funny-dog-i-dunno-lol.jpg" alt="">
 </aside>
 <section class='login_form flex'>
-  <form method="post" action="{% url 'index' %}">
+  <form method="post" action="{% url 'auth_login' %}">
     {% csrf_token %} 
     {{ form.as_p }}
 
