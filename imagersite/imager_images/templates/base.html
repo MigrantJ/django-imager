@@ -13,12 +13,12 @@
     <link rel="stylesheet" href="{% static "css/reset.css" %}">
     <link rel="stylesheet" href="{% static "css/layout.css" %}">
     <link rel="stylesheet" href="{% static "css/style.css" %}">
-    <title>{% block title %}User test{% endblock %}</title>
+    <title>Code Fellows Imager with Django</title>
 </head>
 <body>
-    <div id="header">
+    <header id="header">
     {% block header %}
-    <a href="{% url 'index' %}">{% trans "Home" %}</a> | 
+        <a href="{% url 'index' %}">{% trans "Home" %}</a> | 
     {% if user.is_authenticated %}
         {% trans "Logged in" %}: {{ user.username }} 
         (<a href="{% url 'auth_logout' %}">{% trans "Log out" %}</a> | 
@@ -26,16 +26,16 @@
     {% else %}
        <a href="{% url 'auth_login' %}">{% trans "Log in" %}</a>
     {% endif %}
-    <hr />
     {% endblock %}
-    </div>
-    <div id="content">
+    </header>
+    <main id="content">
     {% block content %}{% endblock %}
-    </div>
-    <div id="footer">
+    </main>
+    <footer id="footer">
     {% block footer %}
-        <hr />
+        <p>Imager Replica</p>
+        <p>Created by Jim Grant and Scott Schmidt</p>
     {% endblock %}
-    </div>
+    </footer>
 </body>
 </html>
