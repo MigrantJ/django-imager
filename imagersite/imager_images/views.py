@@ -1,14 +1,16 @@
-from django.http import HttpResponse
-from django.template import loader
+from django.shortcuts import render
 from .models import Photos
 # from django.views.generic import TemplateView
 
+# import pdb; pdb.set_trace()
+
 
 def index(request):
-    rand_photo = Photos.objects.filter()
-    template = loader.get_template('index.html')
-    response_body = template.render()
-    return HttpResponse(response_body)
+    rand_photo = Photos.objects.filter(published='public').first()
+    context = {
+        'photo': rand_photo
+    }
+    return render(request, 'index.html', context=context)
 
 
 # class ClassView(TemplateView):

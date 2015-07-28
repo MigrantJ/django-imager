@@ -3,16 +3,18 @@
 
 {% block content %}
   <aside class='signup'>
-    
+    <a href="../accounts/register" title="Register">Register</a>
   </aside>
   <section class='img_cover'>
-    {% for pic in public_pics %}
-      <img src="{% cycle (some pic) %}" alt="Cover Photo">
-    {% endfor %}
+    {% if photo %}
+      <img src="{{ MEDIA_ROOT }}{{ photo.image.url }}" alt="Cover Photo">
+    {% else %}
+      <img src="http://picsportray.com/wp-content/uploads/2015/06/funny-dog-i-dunno-lol.jpg" alt="">
+    {% endif %}
   </section>
 {% endblock %}
 
-
+<!-- 
 It will contain marketing text that invites users to join the site. 
 It will include a prominent display of an image chosen at random from all the public photos uploaded by your users.  
 If there are no public photos, it should show an image you pre-select (served as a static resource) instead.
@@ -22,4 +24,4 @@ The login call to action, when clicked, will lead to a login form.
 The registration call to action will lead to the registration page.
 
 The home page should make use of a basic HTML skeleton provided by a base.html template.
-It should fill blocks in that skeleton rather than defining the entire layout of the page itself.
+It should fill blocks in that skeleton rather than defining the entire layout of the page itself. -->
