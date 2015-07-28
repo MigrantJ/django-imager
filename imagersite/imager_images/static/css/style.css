@@ -7,6 +7,8 @@ header {
   color: gray;
   text-decoration: none;
   text-indent: 1.5%;
+  padding: 1% 0;
+  font-size: 1.5rem;
 }
 
 form {
@@ -39,4 +41,14 @@ img {
 
 .notifications p {
   margin-left: 5%;
+}
+
+.profile {
+  background-color: rgb(202, 202, 202);
+  border-radius: 2rem;
+  padding-left: 2.5%;
+}
+
+.user_header {
+  margin-bottom: 2%;
 }

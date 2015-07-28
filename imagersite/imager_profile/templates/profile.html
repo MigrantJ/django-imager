@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+{% if user.is_authenticated %}
+  <section class='profile container'>
+    <section class='user_header'>
+      <h1>{% trans "Welcome" %} {{ user.username }}</h1>
+      <p>{% trans 'Last Login: ' %}{{ user.last_login }}</p>
+      <p>{% trans 'Member Since: '%}{{ user.date_joined }}</p>
+      <a href="{% url 'auth_password_change' %}">{% trans "Change password" %}</a>
+    </section>
+    <section class=''>
+      <section class='user_profile one-half column'>
+      <h2>User Profile Info</h2>
+        <ul>
+          <li>Favorite Camera: {{ user.profile.fav_camera }}</li>
+          <li>Address: {{ user.profile.address }}</li>
+          <li>Personal Website: 
+              <a href='{{ user.profile.url }}'>{{ user.profile.url }}</a>
+          </li>
+          <li>Photography Type: {{ user.profile.photo_type }}</li>
+        </ul>
+      </section>
+      <aside class='user_stats one-half column'>
+        <h2>User Stats</h2>  
+        <ul>
+          <li>Total Photos<p></p></li>
+          <li>Total Albums<p></p></li>
+          <li>Last Photo Posted<p></p></li>
+        </ul>
+      </aside>
+    </section>
+  </section>
+{% else %}
+<h1>{% trans "Please Login" %}</h1>
+{% endif %}
+{% endblock %}
