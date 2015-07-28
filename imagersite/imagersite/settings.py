@@ -48,11 +48,14 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'imager_profile',
     'imager_images',
     'bootstrap3',
     'registration'
 )
+
+SITE_ID = 1
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
