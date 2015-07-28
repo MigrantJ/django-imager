@@ -339,12 +339,12 @@ td:last-child {
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 button,
 .button {
-  margin-bottom: 1rem; }
+  margin-bottom: .5rem; }
 input,
 textarea,
 select,
 fieldset {
-  margin-bottom: 1.5rem; }
+  margin-bottom: .5rem; }
 pre,
 blockquote,
 dl,
@@ -354,8 +354,8 @@ p,
 ul,
 ol,
 form {
-  margin-bottom: 1rem;
-  display: inline-block;
+  margin-bottom: .5rem;
+  display: block;
 }
 
 

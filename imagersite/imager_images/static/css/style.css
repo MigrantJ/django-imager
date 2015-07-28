@@ -2,6 +2,19 @@ header, main, footer {
   margin: 1.5%;
 }
 
-.notifications p {
+form {
+  margin-left: 5%
+}
+
+img {
+  max-width: 100%
+}
+
+#content {
+  display: flex;
+}
+
+.helptext, .notifications p {
   display: block;
+  margin-left: 5%
 }
