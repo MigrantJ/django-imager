@@ -1,5 +1,12 @@
-header, main, footer {
+main, footer {
   margin: 1.5%;
+}
+
+header {
+  background-color: black;
+  color: gray;
+  text-decoration: none;
+  text-indent: 1.5%;
 }
 
 form {
@@ -16,5 +23,6 @@ img {
 
 .helptext, .notifications p {
   display: block;
-  margin-left: 5%
+  margin-left: .5%;
+  font-size: .5rem;
 }
