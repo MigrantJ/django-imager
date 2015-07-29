@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load thumbnail %}
 {% load i18n %}
 
 {% block content %}
@@ -8,6 +9,22 @@
       <h1>{% trans "Welcome" %} {{ user.username }}</h1>
       <p>{% trans 'Last Login: ' %}{{ user.last_login }}</p>
       <p>{% trans 'Member Since: '%}{{ user.date_joined }}</p>
+    </section>
+    <section class='user_nav'>
+      <ul>
+      {% thumbnail photo.image "200x100" as im %}
+        <li>
+          <a href="images/library/" title="">Library</a>
+          <img src="{{ MEDIA_ROOT }}{{ im.url }}" alt="">
+        </li>
+      {% endthumbnail %}
+      {% thumbnail album.cover.image "200x100" as alb %}
+        <li>
+          <a href="images/albums/" title="">Albums</a>
+          <img src="{{ MEDIA_ROOT }}{{ alb.url }}" alt="">
+        </li>
+      {% endthumbnail %}
+      </ul>
     </section>
     <section class=''>
       <section class='user_profile one-half column'>

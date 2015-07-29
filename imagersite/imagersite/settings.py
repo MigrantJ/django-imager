@@ -52,7 +52,8 @@ INSTALLED_APPS = (
     'imager_profile',
     'imager_images',
     'bootstrap3',
-    'registration'
+    'registration',
+    'sorl.thumbnail'
 )
 
 SITE_ID = 1

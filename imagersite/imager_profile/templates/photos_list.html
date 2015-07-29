@@ -1,12 +1,14 @@
 {% extends "base.html" %}
+{% load thumbnail %}
 {% load i18n %}
 
 {% block content %}
 {% if user.is_authenticated %}
   <ul>
   {% for photo in object_list %}
-    <img src="{{ photo.image.url }}" alt="{{ photo.title }}">
-    <p>{{ photo.title }}</p>
+    {% thumbnail photo.image "200x100" as im %}
+    <img src="{{ im.url }}">
+    {% endthumbnail %}
   {% empty %}
     <li>{% trans 'No Photos! Go add some, you fool!!!' %}</li>
   {% endfor %}  
@@ -15,3 +17,6 @@
 <h1>{% trans "Please Login" %}</h1>
 {% endif %}
 {% endblock %}
+
+<!--     <img src="{{ photo.image.url }}" alt="{{ photo.title }}">
+    <p>{{ photo.title }}</p> -->
