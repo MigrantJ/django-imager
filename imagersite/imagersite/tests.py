@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.test import Client
 from django.contrib.auth.models import User
+from django.core import mail
 
 
 class TestIndexView(TestCase):
@@ -16,18 +17,21 @@ class TestIndexView(TestCase):
         )
 
     def test_responds(self):
-        assert self.res.status_code == 200
+        self.assertEqual(self.res.status_code, 200)
 
     def test_html_body(self):
-        assert '<!DOCTYPE html>' in self.res.content
+        self.assertIn('<!DOCTYPE html>', self.res.content)
 
     def test_links_on_not_auth(self):
-        assert 'id="no_auth"' in self.res.content
+        self.assertIn('id="no_auth"', self.res.content)
 
     def test_links_on_auth(self):
-        assert self.c.login(username=self.testuser.username, password='password')
+        assert self.c.login(
+            username=self.testuser.username,
+            password=self.password
+        )
         self.res = self.c.get('/')
-        assert 'id="auth"' in self.res.content
+        self.assertIn('id="auth"', self.res.content)
 
     @classmethod
     def tearDownClass(cls):
@@ -45,14 +49,44 @@ class TestRegistrationView(TestCase):
         cls.res = cls.c.get('/accounts/register/')
 
     def test_responds(self):
-        assert self.res.status_code == 200
+        self.assertEqual(self.res.status_code, 200)
 
     def test_form_is_present(self):
-        assert self.res.context['form'] is not None
-        assert 'login_form flex' in self.res.content
+        self.assertIsNotNone(self.res.context['form'])
+        self.assertIn('login_form flex', self.res.content)
 
     @classmethod
     def tearDownClass(cls):
         cls.c = None
         cls.res = None
 
+
+class TestRegister(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.c = Client()
+
+    def setUp(self):
+        self.res = self.c.post('/accounts/register/', {
+            'username': 'testuser',
+            'password1': 'password',
+            'password2': 'password',
+            'email': 'test@test.com'
+        }, follow=True)
+
+    def test_responds(self):
+        self.assertEqual(len(self.res.redirect_chain), 1)
+        address, status = self.res.redirect_chain[0]
+        self.assertIn('/accounts/register/complete/', address)
+        self.assertEqual(status, 302)
+
+    def test_sends_email(self):
+        self.assertEqual(len(mail.outbox), 1)
+
+    def tearDown(self):
+        self.res = None
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.c = None
