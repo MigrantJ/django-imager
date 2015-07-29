@@ -8,7 +8,6 @@
       <h1>{% trans "Welcome" %} {{ user.username }}</h1>
       <p>{% trans 'Last Login: ' %}{{ user.last_login }}</p>
       <p>{% trans 'Member Since: '%}{{ user.date_joined }}</p>
-      <a href="{% url 'auth_password_change' %}">{% trans "Change password" %}</a>
     </section>
     <section class=''>
       <section class='user_profile one-half column'>

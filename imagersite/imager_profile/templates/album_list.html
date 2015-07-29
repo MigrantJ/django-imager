@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+{% if user.is_authenticated %}
+  <ul>
+  {% for album in object_list %}
+    <li><a href='/{{ album.id }}'>{{ album }}</a></li>
+  {% empty %}
+    <li>{% trans 'No Albums! Go add some, you fool!!!' %}</li>
+  {% endfor %}  
+  </ul>
+{% else %}
+<h1>{% trans "Please Login" %}</h1>
+{% endif %}
+{% endblock %}
