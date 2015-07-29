@@ -15,6 +15,18 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.8/howto/static-files/
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# Media File Handling
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# STATICFILES_DIRS = (STATIC_ROOT,)
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
@@ -36,9 +48,19 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'imager_profile',
-    'imager_images'
+    'imager_images',
+    'bootstrap3',
+    'registration'
 )
+
+SITE_ID = 1
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+ACCOUNT_ACTIVATION_DAYS = 7
+
+LOGIN_REDIRECT_URL = '/'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -56,7 +78,10 @@ ROOT_URLCONF = 'imagersite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            'imager_images',
+            'imager_profile',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -68,6 +93,7 @@ TEMPLATES = [
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'imagersite.wsgi.application'
 
@@ -95,15 +121,3 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.8/howto/static-files/
-
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-
-# Media File Handling
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
