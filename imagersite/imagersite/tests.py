@@ -7,7 +7,7 @@ from django.core import mail
 class TestIndexView(TestCase):
 
     @classmethod
-    def setUpTestData(cls):
+    def setUpClass(cls):
         cls.c = Client()
         cls.res = cls.c.get('/')
         cls.password = 'password'
@@ -90,3 +90,60 @@ class TestRegister(TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.c = None
+
+
+class TestLoginView(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.c = Client()
+        cls.res = cls.c.get('/accounts/login/')
+
+    def test_responds(self):
+        self.assertEqual(self.res.status_code, 200)
+
+    def test_form_is_present(self):
+        self.assertIsNotNone(self.res.context['form'])
+        self.assertIn('login_form flex', self.res.content)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.c = None
+        cls.res = None
+
+
+class TestLogin(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.c = Client()
+        cls.testname = 'testuser2'
+        cls.testpass = 'password'
+        cls.testuser = User.objects.create_user(
+            username=cls.testname,
+            password=cls.testpass
+        )
+
+    def setUp(self):
+        self.res = self.c.post('/accounts/login/', {
+            'username': self.testname,
+            'password': self.testpass,
+        }, follow=True)
+
+    def test_responds(self):
+        self.assertEqual(len(self.res.redirect_chain), 1)
+        address, status = self.res.redirect_chain[0]
+        self.assertEqual(status, 302)
+        addressparts = address.split('//')
+        route = addressparts[1].split('/')[1]
+        self.assertEqual(route, '')
+
+    def tearDown(self):
+        self.res = None
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.c = None
+        cls.testname = None
+        cls.testpass = None
+        cls.testuser = None
