@@ -19,6 +19,14 @@ img {
   max-width: 100%
 }
 
+.user_nav ul li {
+  list-style: none;
+}
+
+li img {
+  box-shadow: 
+}
+
 .login_form {
   background-color: rgb(202, 202, 202);
   border-radius: 1rem;
@@ -51,4 +59,9 @@ img {
 
 .user_header {
   margin-bottom: 2%;
+}
+
+
+@media(max-width: 400px) {
+  
 }

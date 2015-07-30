@@ -4,7 +4,7 @@ from imager_images.models import Photos, Album
 
 class IndexView(TemplateView):
     template_name = 'profile.html'
-
+    
     def get_context_data(self, **kwargs):
         pho = Photos.objects.filter(published='public').order_by('?').first()
         alb = Album.objects.all().order_by('?').first()

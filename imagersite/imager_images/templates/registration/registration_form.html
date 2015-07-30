@@ -8,7 +8,7 @@
 <section class='login_form flex'>
   <form method="post" action="{% url 'registration_register' %}">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form.as_ul }}
 
     <input type="submit" value="{% trans 'Submit' %}" />
   </form>
