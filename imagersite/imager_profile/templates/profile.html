@@ -18,6 +18,7 @@
       <section class='user_nav one-half column container'>
         <ul class='one-half column'>
         {% thumbnail photo.image "200x100" as im %}
+          {% csrf_token %}
           <li>
             <p>Library</p>
           </li>
@@ -29,6 +30,7 @@
         </ul>
         {% endthumbnail %}
         {% thumbnail album.cover.image "200x100" as alb %}
+          {% csrf_token %}
          <ul class='one-half column'> 
           <li>
             <p>Albums</p>
