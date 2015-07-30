@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, ListView
+from django.views.generic import TemplateView, ListView, DetailView
 from imager_images.models import Photos, Album
 
 
@@ -38,4 +38,13 @@ class AlbumDetailListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ListView, self).get_context_data(**kwargs)
+        return context
+
+
+class PhotoDetailView(DetailView):
+    template_name = 'photos_detail.html'
+    model = Photos
+
+    def get_context_data(self, **kwargs):
+        context = super(DetailView, self).get_context_data(**kwargs)
         return context

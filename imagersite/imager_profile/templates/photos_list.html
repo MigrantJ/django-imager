@@ -7,7 +7,9 @@
   <ul>
   {% for photo in object_list %}
     {% thumbnail photo.image "200x100" as im %}
-    <img src="{{ im.url }}">
+    <a href="{% url 'photo_detail' photo.id %}">
+      <img src="{{ im.url }}">
+    </a>
     {% endthumbnail %}
   {% empty %}
     <li>{% trans 'No Photos! Go add some, you fool!!!' %}</li>
