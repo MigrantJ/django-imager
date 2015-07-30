@@ -10,7 +10,7 @@ urlpatterns = [
         views.AlbumDetailListView.as_view(),
         name='albums_detail'),
     url(
-        r'^images/photos/(?P<photo_id>\d+)',
-        views.AlbumDetailListView.as_view(),
+        r'^images/photos/(?P<pk>\d+)$',
+        views.PhotoDetailView.as_view(),
         name='photo_detail'),
 ]
