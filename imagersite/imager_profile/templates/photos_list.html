@@ -5,14 +5,12 @@
 {% block content %}
 {% if user.is_authenticated %}
 <section class='container'>
-  <ul class='images'>
   {% for photo in object_list %}
-    {% thumbnail photo.image "200x100" as im %}
-    <section class='img_detail one-third column'>      
-      <a href="{% url 'photo_detail' photo.id %}" >
-        <img src="{{ im.url }}">
+    {% thumbnail photo.image "200x200" as im %} 
+      <a href="{% url 'photo_detail' photo.id %}">
+        <img src="{{ im.url }}" class='img_detail'>
       </a>
-    </section>
+      {{photo.description }}
     {% endthumbnail %}
   {% empty %}
     <li>{% trans 'No Photos! Go add some, you fool!!!' %}</li>

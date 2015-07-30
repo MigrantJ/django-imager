@@ -61,8 +61,10 @@ li img {
   margin-bottom: 2%;
 }
 
-.images {
-  
+.img_detail {
+  display: inline;
+  margin: 5% 5%;
+  box-shadow: 10px 5px 5px black;
 }
 
 
