@@ -70,10 +70,6 @@ class TestAlbum(TestCase):
     def test_new_empty_desc(self):
         assert self.user1_album.description == ''
 
-    def test_cover(self):
-        self.user1_album.cover(self.user1_photo)
-        assert self.user1_album == self.user1_photo
-
     @classmethod
     def tearDownClass(cls):
         users = User.objects.all()

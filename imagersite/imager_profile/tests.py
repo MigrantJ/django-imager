@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 from .models import ImagerProfile
 import factory
 from . import models
@@ -47,3 +47,27 @@ class UserTests(TestCase):
 
     def test_is_active(self):
         assert self.testuser.profile.is_active
+
+
+class TestProfileView(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.password = 'password'
+        cls.testuser = models.User.objects.create_user(
+            username='person',
+            password=cls.password
+        )
+        cls.c = Client()
+        cls.res = cls.c.get('/profile')
+
+    def test_301_if_no_login(self):
+        self.assertEqual(self.res.status_code, 301)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.c = None
+        cls.res = None
+        cls.password = None
+        cls.testuser = None
+        models.User.objects.all().delete()

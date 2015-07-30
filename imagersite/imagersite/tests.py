@@ -39,6 +39,7 @@ class TestIndexView(TestCase):
         cls.res = None
         cls.password = None
         cls.testuser = None
+        User.objects.all().delete()
 
 
 class TestRegistrationView(TestCase):
@@ -136,7 +137,7 @@ class TestLogin(TestCase):
         self.assertEqual(status, 302)
         addressparts = address.split('//')
         route = addressparts[1].split('/')[1]
-        self.assertEqual(route, '')
+        self.assertEqual(route, 'profile')
 
     def tearDown(self):
         self.res = None
@@ -147,3 +148,4 @@ class TestLogin(TestCase):
         cls.testname = None
         cls.testpass = None
         cls.testuser = None
+        User.objects.all().delete()
