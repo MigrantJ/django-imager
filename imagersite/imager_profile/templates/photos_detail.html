@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load thumbnail %}
 
 {% block content %}
-    <img src="{{ object.image.url }}">
+  <section class='container profile'>
+  {% thumbnail object.image "300x300" as im %} 
+    <figure class='img_detail offset-by-three column'>
+      <figcaption>{{ object.description }}</figcaption>
+      <img src="{{ im.url }}">
+    </figure>
+  {% endthumbnail %}
+  </section>
 {% endblock %}

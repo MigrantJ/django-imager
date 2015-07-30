@@ -61,10 +61,23 @@ li img {
   margin-bottom: 2%;
 }
 
-.img_detail {
+figure {
+  margin: 0 auto;
+  display: inline-block;
+  min-width: 33%;
+}
+
+figure img {
   display: inline;
   margin: 5% 5%;
   box-shadow: 10px 5px 5px black;
+}
+
+figcaption {
+  text-align: center;
+  font-family: fantasy;
+  font-size: xx-large;
+  font-weight: bold;
 }
 
 
