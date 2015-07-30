@@ -42,7 +42,8 @@ class AlbumDetailListView(ListView):
     def get_queryset(self):
         return Photos.objects.filter(
             published='public',
-            user=self.request.user)
+            user=self.request.user,
+            albums__id=self.kwargs['pk'])
 
 
 class PhotoDetailView(DetailView):

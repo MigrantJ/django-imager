@@ -3,10 +3,10 @@ import views
 
 urlpatterns = [
     url(r'^$', views.IndexView.as_view(), name='profile'),
-    url(r'^images/library', views.PhotoListView.as_view(), name='library'),
-    url(r'^images/albums', views.AlbumListView.as_view(), name='albums'),
+    url(r'^images/library$', views.PhotoListView.as_view(), name='library'),
+    url(r'^images/albums$', views.AlbumListView.as_view(), name='albums'),
     url(
-        r'^images/albums/(?P<album_id>\d+)',
+        r'^images/albums/(?P<pk>\d+)$',
         views.AlbumDetailListView.as_view(),
         name='albums_detail'),
     url(
