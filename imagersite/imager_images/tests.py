@@ -29,6 +29,7 @@ class AlbumFactory(factory.DjangoModelFactory):
 class TestPhoto(TestCase):
     @classmethod
     def setUpClass(cls):
+        super(TestCase, cls)
         cls.user1_photo = PhotoFactory.create()
         cls.user1_photo = PhotoFactory.create()
 
@@ -48,6 +49,7 @@ class TestPhoto(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        super(TestCase, cls)
         users = User.objects.all()
         non_super = users[1:]
         for u in non_super:
@@ -57,6 +59,7 @@ class TestPhoto(TestCase):
 class TestAlbum(TestCase):
     @classmethod
     def setUpClass(cls):
+        super(TestCase, cls)
         cls.user1_photo = PhotoFactory.create()
         cls.user1_photo = PhotoFactory.create()
         cls.user1_album = AlbumFactory.create()
@@ -72,6 +75,7 @@ class TestAlbum(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        super(TestCase, cls)
         users = User.objects.all()
         non_super = users[1:]
         for u in non_super:

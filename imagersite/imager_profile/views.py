@@ -6,14 +6,18 @@ class IndexView(TemplateView):
     template_name = 'profile.html'
 
     def get_context_data(self, **kwargs):
-        pho = Photos.objects.filter(
-            published='public',
-            user=self.request.user).order_by('?').first()
-        alb = Album.objects.filter(
-            user=self.request.user).order_by('?').first()
-        context = super(IndexView, self).get_context_data(**kwargs)
-        context['photo'] = pho
-        context['album'] = alb
+        try:
+            pho = Photos.objects.filter(
+                published='public',
+                user=self.request.user).order_by('?').first()
+            alb = Album.objects.filter(
+                user=self.request.user).order_by('?').first()
+            context = super(IndexView, self).get_context_data(**kwargs)
+            context['photo'] = pho
+            context['album'] = alb
+        except TypeError:
+            context = super(IndexView, self).get_context_data(**kwargs)
+
         return context
 
 

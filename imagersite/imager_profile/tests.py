@@ -53,19 +53,34 @@ class TestProfileView(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        super(TestCase, cls)
+        cls.username = 'person'
         cls.password = 'password'
         cls.testuser = models.User.objects.create_user(
-            username='person',
+            username=cls.username,
             password=cls.password
         )
         cls.c = Client()
-        cls.res = cls.c.get('/profile')
+        cls.res = cls.c.get('/profile', follow=True)
 
-    def test_301_if_no_login(self):
-        self.assertEqual(self.res.status_code, 301)
+    def test_denied_if_no_login(self):
+        self.assertEqual(self.res.status_code, 200)
+        address, status = self.res.redirect_chain[0]
+        self.assertEqual(status, 301)
+        self.assertIn('Please Login', self.res.content)
+
+    def test_allowed_if_login(self):
+        assert self.c.login(
+            username=self.username,
+            password=self.password
+        )
+        self.res = self.c.get('/profile', follow=True)
+        self.assertEqual(self.res.status_code, 200)
+        self.assertIn(self.username, self.res.content)
 
     @classmethod
     def tearDownClass(cls):
+        super(TestCase, cls)
         cls.c = None
         cls.res = None
         cls.password = None
