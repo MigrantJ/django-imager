@@ -29,15 +29,9 @@ class AlbumFormView(FormView):
         return kwargs
 
     def form_valid(self, form):
-        album = form.save()
-        album.objects.create(
-            user=form.cleaned_data['user'],
-            title=form.cleaned_data['title'],
-            description=form.cleaned_data['description'],
-            published=form.cleaned_data['published'],
-            photos=form.cleaned_data['photos'],
-            cover=form.cleaned_data['cover'],
-        )
+        album = form.save(commit=False)
+        album.user = self.request.user
+        album.save()
         return super(AlbumFormView, self).form_valid(album)
 
 
