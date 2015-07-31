@@ -19,6 +19,11 @@ class AlbumFormView(FormView):
     form_class = AlbumForm
     success_url = '/profile/'
 
+    def get_form_kwargs(self):
+        kwargs = super(AlbumFormView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
     def form_valid(self, form):
         pass
 
