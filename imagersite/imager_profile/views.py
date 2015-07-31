@@ -29,7 +29,6 @@ class PhotoListView(ListView):
         photos = None
         try:
             photos = Photos.objects.filter(
-                published='public',
                 user=self.request.user)
         except TypeError:
             pass
