@@ -6,14 +6,18 @@ class IndexView(TemplateView):
     template_name = 'profile.html'
 
     def get_context_data(self, **kwargs):
-        pho = Photos.objects.filter(
-            published='public',
-            user=self.request.user).order_by('?').first()
-        alb = Album.objects.filter(
-            user=self.request.user).order_by('?').first()
-        context = super(IndexView, self).get_context_data(**kwargs)
-        context['photo'] = pho
-        context['album'] = alb
+        try:
+            pho = Photos.objects.filter(
+                published='public',
+                user=self.request.user).order_by('?').first()
+            alb = Album.objects.filter(
+                user=self.request.user).order_by('?').first()
+            context = super(IndexView, self).get_context_data(**kwargs)
+            context['photo'] = pho
+            context['album'] = alb
+        except TypeError:
+            context = super(IndexView, self).get_context_data(**kwargs)
+
         return context
 
 
@@ -22,9 +26,15 @@ class PhotoListView(ListView):
     model = Photos
 
     def get_queryset(self):
-        return Photos.objects.filter(
-            published='public',
-            user=self.request.user)
+        photos = None
+        try:
+            photos = Photos.objects.filter(
+                published='public',
+                user=self.request.user)
+        except TypeError:
+            pass
+
+        return photos
 
 
 class AlbumListView(ListView):
@@ -32,7 +42,13 @@ class AlbumListView(ListView):
     model = Album
 
     def get_queryset(self):
-        return Album.objects.filter(user=self.request.user)
+        albums = None
+        try:
+            albums = Album.objects.filter(user=self.request.user)
+        except TypeError:
+            pass
+
+        return albums
 
 
 class AlbumDetailListView(ListView):
@@ -40,10 +56,16 @@ class AlbumDetailListView(ListView):
     model = Album
 
     def get_queryset(self):
-        return Photos.objects.filter(
-            published='public',
-            user=self.request.user,
-            albums__id=self.kwargs['pk'])
+        photos = None
+        try:
+            photos = Photos.objects.filter(
+                published='public',
+                user=self.request.user,
+                albums__id=self.kwargs['pk'])
+        except TypeError:
+            pass
+
+        return photos
 
 
 class PhotoDetailView(DetailView):

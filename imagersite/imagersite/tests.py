@@ -8,6 +8,7 @@ class TestIndexView(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        super(TestCase, cls)
         cls.c = Client()
         cls.res = cls.c.get('/')
         cls.password = 'password'
@@ -35,16 +36,19 @@ class TestIndexView(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        super(TestCase, cls)
         cls.c = None
         cls.res = None
         cls.password = None
         cls.testuser = None
+        User.objects.all().delete()
 
 
 class TestRegistrationView(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        super(TestCase, cls)
         cls.c = Client()
         cls.res = cls.c.get('/accounts/register/')
 
@@ -57,6 +61,7 @@ class TestRegistrationView(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        super(TestCase, cls)
         cls.c = None
         cls.res = None
 
@@ -65,6 +70,7 @@ class TestRegister(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        super(TestCase, cls)
         cls.c = Client()
 
     def setUp(self):
@@ -89,6 +95,7 @@ class TestRegister(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        super(TestCase, cls)
         cls.c = None
 
 
@@ -96,6 +103,7 @@ class TestLoginView(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        super(TestCase, cls)
         cls.c = Client()
         cls.res = cls.c.get('/accounts/login/')
 
@@ -108,6 +116,7 @@ class TestLoginView(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        super(TestCase, cls)
         cls.c = None
         cls.res = None
 
@@ -116,6 +125,7 @@ class TestLogin(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        super(TestCase, cls)
         cls.c = Client()
         cls.testname = 'testuser2'
         cls.testpass = 'password'
@@ -136,14 +146,16 @@ class TestLogin(TestCase):
         self.assertEqual(status, 302)
         addressparts = address.split('//')
         route = addressparts[1].split('/')[1]
-        self.assertEqual(route, '')
+        self.assertEqual(route, 'profile')
 
     def tearDown(self):
         self.res = None
 
     @classmethod
     def tearDownClass(cls):
+        super(TestCase, cls)
         cls.c = None
         cls.testname = None
         cls.testpass = None
         cls.testuser = None
+        User.objects.all().delete()
