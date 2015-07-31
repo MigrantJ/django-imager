@@ -1,4 +1,4 @@
-from .models import Photos
+from .models import Photos, Album
 from django.views.generic import TemplateView
 from django.views.generic import FormView
 from .forms import AlbumForm, PhotoForm
@@ -29,7 +29,16 @@ class AlbumFormView(FormView):
         return kwargs
 
     def form_valid(self, form):
-        pass
+        album = form.save()
+        album.objects.create(
+            user=form.cleaned_data['user'],
+            title=form.cleaned_data['title'],
+            description=form.cleaned_data['description'],
+            published=form.cleaned_data['published'],
+            photos=form.cleaned_data['photos'],
+            cover=form.cleaned_data['cover'],
+        )
+        return super(AlbumFormView, self).form_valid(album)
 
 
 class PhotoFormView(FormView):
@@ -38,4 +47,5 @@ class PhotoFormView(FormView):
     success_url = 'images/photo_form/'
 
     def form_valid(self, form):
+        # photo = Photos.objects.create()
         pass
