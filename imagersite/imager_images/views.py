@@ -8,9 +8,13 @@ class IndexView(TemplateView):
     template_name = 'index.html'
 
     def get_context_data(self, **kwargs):
-        p = Photos.objects.filter(published='public').order_by('?').first()
-        context = super(IndexView, self).get_context_data(**kwargs)
-        context['photo'] = p
+        try:
+            p = Photos.objects.filter(published='public').order_by('?').first()
+            context = super(IndexView, self).get_context_data(**kwargs)
+            context['photo'] = p
+        except TypeError:
+            context = super(IndexView, self).get_context_data(**kwargs)
+
         return context
 
 

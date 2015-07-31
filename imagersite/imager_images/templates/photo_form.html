@@ -2,8 +2,12 @@
 {% load i18n %}
 
 {% block content %}
+{% if user.is_authenticated %}
   <form action="" method="post" accept-charset="utf-8">
   {% csrf_token %}
     {{ form.as_p }}
   </form>
+{% else %}
+  <h1>Please Login.</h1>
+{% endif %}
 {% endblock %}
