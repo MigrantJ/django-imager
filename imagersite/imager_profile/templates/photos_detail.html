@@ -3,6 +3,7 @@
 {% load thumbnail %}
 
 {% block content %}
+{% if user.is_authenticated %}
   <section class='container profile'>
   {% thumbnail object.image "300x300" as im %} 
     <figure class='img_detail offset-by-three column'>
@@ -11,4 +12,7 @@
     </figure>
   {% endthumbnail %}
   </section>
+{% else %}
+<h1>{% trans "Please Login" %}</h1>
+{% endif %}
 {% endblock %}
