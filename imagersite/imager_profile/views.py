@@ -2,6 +2,7 @@ from django.views.generic import TemplateView, ListView, DetailView, FormView
 from imager_images.models import Photos, Album
 from .models import ImagerProfile
 # from django.contrib.auth.models import User
+from .forms import ProfileSettingsForm
 
 
 class IndexView(TemplateView):
@@ -78,16 +79,16 @@ class PhotoDetailView(DetailView):
 
 class ProfileSettingsView(FormView):
     template_name = 'profile_settings.html'
-    form_class = ImagerProfile
+    form_class = ProfileSettingsForm
     success_url = '/profile/settings'
 
     # def get_form_kwargs(self):
     #     kwargs = super(ProfileSettingsView, self).get_form_kwargs()
     #     kwargs['request'] = self.request
     #     return kwargs
-
+    #
     # def form_valid(self, form):
     #     user = form.save(commit=False)
     #     user.user = self.request.user
     #     user.save()
-    #     return super(ProfileSettingsView, self).form_valid(user)
+    #     return super(ProfileSettingsView, self).form_valid()
