@@ -25,9 +25,9 @@ class AlbumFormView(FormView):
 
     def get_form(self, form_class=AlbumForm):
         try:
-            album = Album.objects.get(user=self.request.user)
+            album = Album.objects.get(user=self.request.user, pk=self.kwargs['pk'])
             return AlbumForm(instance=album, **self.get_form_kwargs())
-        except Album.DoesNotExist:
+        except KeyError, Album.DoesNotExist:
             return AlbumForm(**self.get_form_kwargs())
 
     def get_form_kwargs(self):
@@ -49,9 +49,9 @@ class PhotoFormView(FormView):
 
     def get_form(self, form_class=PhotoForm):
         try:
-            photo = Photos.objects.get(user=self.request.user)
+            photo = Photos.objects.get(user=self.request.user, pk=self.kwargs['pk'])
             return PhotoForm(instance=photo, **self.get_form_kwargs())
-        except Photos.DoesNotExist:
+        except KeyError, Photos.DoesNotExist:
             return PhotoForm(**self.get_form_kwargs())
 
     def form_valid(self, form):
