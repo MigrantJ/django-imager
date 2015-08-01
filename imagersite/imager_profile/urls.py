@@ -13,5 +13,8 @@ urlpatterns = [
         r'^images/photos/(?P<pk>\d+)$',
         views.PhotoDetailView.as_view(),
         name='photo_detail'),
-    url(r'^profile/settings$', )
+    url(
+        r'^settings/$',
+        views.ProfileSettingsView.as_view(),
+        name='settings'),
 ]

@@ -1,4 +1,4 @@
-from .models import Photos, Album
+from .models import Photos
 from django.views.generic import TemplateView
 from django.views.generic import FormView
 from .forms import AlbumForm, PhotoForm
