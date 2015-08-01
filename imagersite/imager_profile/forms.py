@@ -1,9 +1,18 @@
 from django import forms
 from .models import ImagerProfile
-# from django.contrib.auth.models import User
+from django.contrib.auth.models import User
 
 
-class ProfileSettingsForm(forms.ModelForm):
+class UserSettingsForm(forms.ModelForm):
     class Meta:
-        model = ImagerProfile
-        fields = ['address']
+        model = User
+        fields = ['first_name', 'last_name', 'email']
+
+
+class ProfileSettingsForm(UserSettingsForm):
+    # class Meta:
+    #     model = ImagerProfile
+        # fields = []
+
+    def __init__(self, *args, **kwargs):
+        super(ProfileSettingsForm, self).__init__(*args, **kwargs)
