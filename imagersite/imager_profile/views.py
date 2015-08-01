@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, FormView
 from imager_images.models import Photos, Album
 
 
@@ -75,3 +75,8 @@ class PhotoDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
         return context
+
+
+class ProfileSettingsView(FormView):
+    template_name = 'profile_settings.html'
+    model = ImageProfile
