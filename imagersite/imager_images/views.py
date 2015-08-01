@@ -1,6 +1,6 @@
-from .models import Photos
+from .models import Photos, Album
 from django.views.generic import TemplateView
-from django.views.generic import FormView
+from django.views.generic import FormView, UpdateView
 from .forms import AlbumForm, PhotoForm
 
 
@@ -23,6 +23,13 @@ class AlbumFormView(FormView):
     form_class = AlbumForm
     success_url = '/profile/'
 
+    def get_form(self, form_class=AlbumForm):
+        try:
+            album = Album.objects.get(user=self.request.user)
+            return AlbumForm(instance=album, **self.get_form_kwargs())
+        except Album.DoesNotExist:
+            return AlbumForm(**self.get_form_kwargs())
+
     def get_form_kwargs(self):
         kwargs = super(AlbumFormView, self).get_form_kwargs()
         kwargs['request'] = self.request
@@ -39,6 +46,13 @@ class PhotoFormView(FormView):
     template_name = 'photo_form.html'
     form_class = PhotoForm
     success_url = '/profile/images/library'
+
+    def get_form(self, form_class=PhotoForm):
+        try:
+            photo = Photos.objects.get(user=self.request.user)
+            return PhotoForm(instance=photo, **self.get_form_kwargs())
+        except Photos.DoesNotExist:
+            return PhotoForm(**self.get_form_kwargs())
 
     def form_valid(self, form):
         photo = form.save(commit=False)
