@@ -14,9 +14,12 @@ class ProfileSettingsForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop("request")
         super(ProfileSettingsForm, self).__init__(*args, **kwargs)
-        self.fields['first_name'].initial = self.instance.user.first_name
-        self.fields['last_name'].initial = self.instance.user.last_name
-        self.fields['email'].initial = self.instance.user.email
+        try:
+            self.fields['first_name'].initial = self.instance.user.first_name
+            self.fields['last_name'].initial = self.instance.user.last_name
+            self.fields['email'].initial = self.instance.user.email
+        except:
+            pass
 
     def save(self, *args, **kwargs):
         self.request = kwargs.pop("request")

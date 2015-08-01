@@ -86,3 +86,43 @@ class TestProfileView(TestCase):
         cls.password = None
         cls.testuser = None
         models.User.objects.all().delete()
+
+
+class TestProfileForm(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super(TestCase, cls)
+        cls.username = 'person'
+        cls.password = 'password'
+        cls.testuser = models.User.objects.create_user(
+            username=cls.username,
+            password=cls.password
+        )
+        cls.c = Client()
+        cls.res = cls.c.get('/profile/settings', follow=True)
+
+    def test_denied_if_no_login(self):
+        self.assertEqual(True, True)
+        self.assertEqual(self.res.status_code, 200)
+        address, status = self.res.redirect_chain[0]
+        self.assertEqual(status, 301)
+        self.assertIn('Please Login', self.res.content)
+
+    def test_allowed_if_login(self):
+        self.assertEqual(True, True)
+        assert self.c.login(
+            username=self.username,
+            password=self.password
+        )
+        self.res = self.c.get('/profile/settings', follow=True)
+        self.assertEqual(self.res.status_code, 200)
+        self.assertIn(self.username, self.res.content)
+
+    @classmethod
+    def tearDownClass(cls):
+        super(TestCase, cls)
+        cls.c = None
+        cls.res = None
+        cls.password = None
+        cls.testuser = None
+        models.User.objects.all().delete()
