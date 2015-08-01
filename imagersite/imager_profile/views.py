@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView, ListView, DetailView, FormView
 from imager_images.models import Photos, Album
-# from .models import ImagerProfile
+from .models import ImagerProfile
 # from django.contrib.auth.models import User
 from .forms import ProfileSettingsForm
 
@@ -82,11 +82,18 @@ class ProfileSettingsView(FormView):
     form_class = ProfileSettingsForm
     success_url = '/profile/settings'
 
-    # def get_form_kwargs(self):
-    #     kwargs = super(ProfileSettingsView, self).get_form_kwargs()
-    #     kwargs['request'] = self.request
-    #     return kwargs
-    #
+    def get_form(self, form_class=ProfileSettingsForm):
+        try:
+            profile = ImagerProfile.objects.get(user=self.request.user)
+            return ProfileSettingsForm(
+                instance=profile, **self.get_form_kwargs())
+        except ImagerProfile.DoesNotExist:
+            return ProfileSettingsForm(**self.get_form_kwargs())
+
+    def get_form_kwargs(self):
+        kwargs = super(ProfileSettingsView, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
 
     # def form_valid(self, form):
     #     user = form.save(commit=False)
