@@ -11,6 +11,7 @@
         <a href="{% url 'photo_detail' photo.id %}">
           <img src="{{ im.url }}">
         </a>
+        <a href="{% url 'edit_photo' photo.id %}">Edit</a>
       <figcaption>{{ photo.description }}</figcaption>
     </figure>
     {% endthumbnail %}
