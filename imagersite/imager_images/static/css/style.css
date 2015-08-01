@@ -12,11 +12,12 @@ header {
 }
 
 form {
-  margin-left: 5%
+  margin-left: 5%;
 }
 
 img {
-  max-width: 100%
+  max-width: 100%;
+  border-radius: 1rem;
 }
 
 .user_nav ul li {

@@ -16,5 +16,5 @@ urlpatterns = [
     url(
         r'^settings/$',
         views.ProfileSettingsView.as_view(),
-        name='settings'),
+        name='profile_settings'),
 ]

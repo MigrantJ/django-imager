@@ -78,13 +78,13 @@ class PhotoDetailView(DetailView):
 
 class ProfileSettingsView(FormView):
     template_name = 'profile_settings.html'
-    model = ImagerProfile
+    form_class = ImagerProfile
     success_url = '/profile/settings'
 
-    def get_form_kwargs(self):
-        kwargs = super(ProfileSettingsView, self).get_form_kwargs()
-        kwargs['request'] = self.request
-        return kwargs
+    # def get_form_kwargs(self):
+    #     kwargs = super(ProfileSettingsView, self).get_form_kwargs()
+    #     kwargs['request'] = self.request
+    #     return kwargs
 
     # def form_valid(self, form):
     #     user = form.save(commit=False)

@@ -6,4 +6,4 @@ from .models import ImagerProfile
 class ProfileSettingsForm(forms.ModelForm):
     class Meta:
         model = ImagerProfile
-        fields = ['address', 'url', 'photo_type', 'fav_vamera']
+        fields = ['address']
