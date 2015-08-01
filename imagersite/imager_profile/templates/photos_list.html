@@ -8,11 +8,11 @@
   {% for photo in object_list %}
     {% thumbnail photo.image "200x200" as im %} 
     <figure class='img_detail'>
-        <a href="{% url 'photo_detail' photo.id %}">
-          <img src="{{ im.url }}">
-        </a>
-        <a href="{% url 'edit_photo' photo.id %}">Edit</a>
+      <a href="{% url 'photo_detail' photo.id %}">
+        <img src="{{ im.url }}">
+      </a></br>
       <figcaption>{{ photo.description }}</figcaption>
+      <a href="{% url 'edit_photo' photo.id %}"><button type="">Edit</button></a>
     </figure>
     {% endthumbnail %}
   {% empty %}

@@ -41,7 +41,7 @@ figure img {
 }
 
 figcaption {
-  text-align: center;
+  /*text-align: center;*/
   font-family: fantasy;
   font-size: xx-large;
   font-weight: bold;
