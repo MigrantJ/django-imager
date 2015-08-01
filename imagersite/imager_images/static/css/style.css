@@ -11,8 +11,12 @@ header {
   font-size: 1.5rem;
 }
 
-form {
+/*form {
   margin-left: 5%;
+}*/
+
+.settings p {
+  display: inline-table;
 }
 
 img {
@@ -24,8 +28,23 @@ img {
   list-style: none;
 }
 
-li img {
-  box-shadow: 
+figure {
+  margin: 0 auto;
+  display: inline-block;
+  min-width: 33%;
+}
+
+figure img {
+  display: inline;
+  margin: 5% 5%;
+  box-shadow: 10px 5px 5px black;
+}
+
+figcaption {
+  text-align: center;
+  font-family: fantasy;
+  font-size: xx-large;
+  font-weight: bold;
 }
 
 .login_form {
@@ -60,25 +79,6 @@ li img {
 
 .user_header {
   margin-bottom: 2%;
-}
-
-figure {
-  margin: 0 auto;
-  display: inline-block;
-  min-width: 33%;
-}
-
-figure img {
-  display: inline;
-  margin: 5% 5%;
-  box-shadow: 10px 5px 5px black;
-}
-
-figcaption {
-  text-align: center;
-  font-family: fantasy;
-  font-size: xx-large;
-  font-weight: bold;
 }
 
 
