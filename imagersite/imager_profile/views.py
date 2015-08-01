@@ -8,7 +8,6 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         try:
             pho = Photos.objects.filter(
-                published='public',
                 user=self.request.user).order_by('?').first()
             alb = Album.objects.filter(
                 user=self.request.user).order_by('?').first()
@@ -29,7 +28,6 @@ class PhotoListView(ListView):
         photos = None
         try:
             photos = Photos.objects.filter(
-                published='public',
                 user=self.request.user)
         except TypeError:
             pass
@@ -59,7 +57,6 @@ class AlbumDetailListView(ListView):
         photos = None
         try:
             photos = Photos.objects.filter(
-                published='public',
                 user=self.request.user,
                 albums__id=self.kwargs['pk'])
         except TypeError:

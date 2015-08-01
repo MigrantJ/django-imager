@@ -38,8 +38,10 @@ class AlbumFormView(FormView):
 class PhotoFormView(FormView):
     template_name = 'photo_form.html'
     form_class = PhotoForm
-    success_url = 'images/photo_form/'
+    success_url = '/profile/images/library'
 
     def form_valid(self, form):
-        # photo = Photos.objects.create()
-        pass
+        photo = form.save(commit=False)
+        photo.user = self.request.user
+        photo.save()
+        return super(PhotoFormView, self).form_valid(photo)
