@@ -13,6 +13,8 @@
   {% endthumbnail %}
     {% if not detect %}
       <a href="{% url 'detect_faces' object.id %}">Detect Faces</a>
+    {% else %}
+    <img src="{{ detect }}">
     {% endif %}
   </section>
 {% else %}

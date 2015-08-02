@@ -3,10 +3,19 @@ from imager_images.models import Photos, Album
 from .models import ImagerProfile
 from django.contrib.auth.models import User
 from .forms import ProfileSettingsForm
-import Algorithmia
-import base64
 
-Algorithmia.apiKey = "Simple simWy1EsBB4ZucRa4q8DiPocne11"
+
+def get_faces(path):
+    import Algorithmia
+    import base64
+    Algorithmia.apiKey = "Simple simWy1EsBB4ZucRa4q8DiPocne11"
+
+    with open(path, "rb") as img:
+        b64 = base64.b64encode(img.read())
+
+    faces = Algorithmia.algo("/ANaimi/FaceDetection").pipe(b64)
+
+    print faces
 
 
 class IndexView(TemplateView):
@@ -80,16 +89,8 @@ class PhotoDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
         if self.detect:
-            # get image as base64
-            handle = open(self.object.image.path, "rb")
-            image = base64.b64encode(handle.read())
+            get_faces(self.object.image.path)
 
-            # save to DataAPI
-            inp = [image, "data://.algo/temp/prepix.jpg"]
-            result = Algorithmia.algo("/ANaimi/Base64DataConverter").pipe(inp)
-
-            handle.close()
-            context['detect'] = self.detect
         return context
 
 
