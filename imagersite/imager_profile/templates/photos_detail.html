@@ -4,6 +4,30 @@
 
 {% block content %}
 {% if user.is_authenticated %}
+  <script type="text/javascript">
+    FaceTagger.init({
+      container: '#photo-container',
+      labelUrl: '{{ object.id }}/faces',
+      csrf: '{{ csrf_token }}',
+      originalWidth: {{ object.image.width }},
+      originalHeight: {{ object.image.height }},
+      newWidth: 300,
+      newHeight: 184
+    });
+
+    {% for f in faces %}
+      var face = {
+        id: {{ f.id }},
+        name: "{{ f.name }}",
+        x: {{ f.x }},
+        y: {{ f.y }},
+        width: {{ f.width }},
+        height: {{ f.height }}
+      };
+
+      FaceTagger.make(face);
+    {% endfor %}
+  </script>
   <section class='container profile'>
   {% thumbnail object.image "300x300" as im %} 
     <figure class='img_detail offset-by-three column'>
