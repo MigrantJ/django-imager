@@ -3,7 +3,6 @@ import factory
 from . import models
 from .models import Photos, Album
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 
 
 class UserFactory(factory.DjangoModelFactory):
