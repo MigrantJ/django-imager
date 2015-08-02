@@ -17,4 +17,8 @@ urlpatterns = [
         r'^settings/$',
         views.ProfileSettingsView.as_view(),
         name='profile_settings'),
+    url(
+        r'^images/photos/(?P<pk>\d+)/detect$',
+        views.PhotoDetailView.as_view(detect='hello'),
+        name='detect_faces'),
 ]

@@ -11,6 +11,9 @@
       <img src="{{ im.url }}">
     </figure>
   {% endthumbnail %}
+    {% if not detect %}
+      <a href="{% url 'detect_faces' object.id %}">Detect Faces</a>
+    {% endif %}
   </section>
 {% else %}
 <h1>{% trans "Please Login" %}</h1>

@@ -3,6 +3,10 @@ from imager_images.models import Photos, Album
 from .models import ImagerProfile
 from django.contrib.auth.models import User
 from .forms import ProfileSettingsForm
+import Algorithmia
+import base64
+
+Algorithmia.apiKey = "Simple simWy1EsBB4ZucRa4q8DiPocne11"
 
 
 class IndexView(TemplateView):
@@ -71,9 +75,21 @@ class AlbumDetailListView(ListView):
 class PhotoDetailView(DetailView):
     template_name = 'photos_detail.html'
     model = Photos
+    detect = False
 
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
+        if self.detect:
+            # get image as base64
+            handle = open(self.object.image.path, "rb")
+            image = base64.b64encode(handle.read())
+
+            # save to DataAPI
+            inp = [image, "data://.algo/temp/prepix.jpg"]
+            result = Algorithmia.algo("/ANaimi/Base64DataConverter").pipe(inp)
+
+            handle.close()
+            context['detect'] = self.detect
         return context
 
 
