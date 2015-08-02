@@ -7,7 +7,7 @@
   <form  class='settings' action="{% url 'profile_settings' %}" method="post" accept-charset="utf-8" enctype="multipart/form-data">
   {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" name="add" value="Add">
+    </br><input type="submit" name="add" value="Save">
   </form>
 </section>
 {% else %}

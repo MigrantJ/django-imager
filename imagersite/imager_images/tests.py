@@ -3,6 +3,7 @@ import factory
 from . import models
 from .models import Photos, Album
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -223,7 +224,9 @@ class TestPhotoDetailView(TestCase):
             description='test'
         )
         cls.c = Client()
-        cls.res = cls.c.get('/profile/images/photos/' + str(Photos.objects.all()[0].id), follow=True)
+        cls.res = cls.c.get(
+            '/profile/images/photos/' + str(Photos.objects.all()[0].id),
+            follow=True)
 
     def test_denied_if_no_login(self):
         self.assertEqual(self.res.status_code, 200)
@@ -234,7 +237,9 @@ class TestPhotoDetailView(TestCase):
             username=self.username,
             password=self.password
         )
-        self.res = self.c.get('/profile/images/photos/' + str(Photos.objects.all()[0].id), follow=True)
+        self.res = self.c.get(
+            '/profile/images/photos/' + str(Photos.objects.all()[0].id),
+            follow=True)
         self.assertEqual(self.res.status_code, 200)
         self.assertIn(self.username, self.res.content)
 
@@ -247,3 +252,186 @@ class TestPhotoDetailView(TestCase):
         cls.testuser = None
         models.User.objects.all().delete()
         Photos.objects.all().delete()
+
+
+class TestPhotoEdit(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super(TestCase, cls)
+        cls.username = 'person'
+        cls.password = 'password'
+        cls.testuser = models.User.objects.create_user(
+            username=cls.username,
+            password=cls.password
+        )
+        cls.testphoto = Photos.objects.create(
+            user=cls.testuser,
+            title='test',
+            description='test'
+        )
+        cls.testphoto2 = Photos.objects.create(
+            user=cls.testuser,
+            title='test2',
+            description='test2'
+        )
+        cls.c = Client()
+        cls.c.login(
+            username=cls.username,
+            password=cls.password
+        )
+        cls.edit = cls.c.get(
+            '/imager/photo/' + str(cls.testphoto.id) + '/edit/',
+            follow=True)
+
+    def test_edit_page_load(self):
+        form_fields = ['image', 'title', 'description', 'published']
+        self.assertEqual(
+            self.edit.context['form'].Meta.fields, form_fields)
+
+    def test_edit_image(self):
+        form = self.edit.context['form']
+        data = form.initial
+        data['image'] = self.testphoto2
+        resp = self.c.post('/imager/photo/add', data)
+        resp = self.edit
+        self.assertEqual(
+            resp.context['form'].initial['image'], self.testphoto2)
+
+    def test_edit_title(self):
+        form = self.edit.context['form']
+        data = form.initial
+        data['image'] = self.testphoto
+        data['title'] = 'Monkey'
+        resp = self.c.post('/imager/photo/add', data)
+        resp = self.edit
+        self.assertEqual(
+            resp.context['form'].initial['title'], 'Monkey')
+
+    def test_edit_desc(self):
+        form = self.edit.context['form']
+        data = form.initial
+        data['image'] = self.testphoto
+        data['description'] = 'This is a new description'
+        resp = self.c.post('/imager/photo/add', data)
+        resp = self.edit
+        self.assertEqual(
+            resp.context['form'].initial['description'],
+            'This is a new description')
+
+    def test_edit_published(self):
+        form = self.edit.context['form']
+        data = form.initial
+        data['image'] = self.testphoto
+        data['published'] = 'Public'
+        resp = self.c.post('/imager/photo/add', data)
+        resp = self.edit
+        self.assertEqual(
+            resp.context['form'].initial['published'], 'Public')
+
+    @classmethod
+    def tearDownClass(cls):
+        super(TestCase, cls)
+        cls.c = None
+        cls.res = None
+        cls.password = None
+        cls.testuser = None
+        models.User.objects.all().delete()
+        Photos.objects.all().delete()
+
+
+class TestAlbumEdit(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        super(TestCase, cls)
+        cls.username = 'person'
+        cls.password = 'password'
+        cls.testuser = models.User.objects.create_user(
+            username=cls.username,
+            password=cls.password
+        )
+        cls.testphoto = Photos.objects.create(
+            user=cls.testuser,
+            title='test',
+            description='test'
+        )
+        cls.testphoto2 = Photos.objects.create(
+            user=cls.testuser,
+            title='test2',
+            description='test2'
+        )
+        cls.testalbum = Album.objects.create(
+            user=cls.testuser,
+            title='test',
+            description='test',
+        )
+        cls.c = Client()
+        cls.c.login(
+            username=cls.username,
+            password=cls.password
+        )
+        cls.edit = cls.c.get(
+            '/imager/album/' + str(cls.testalbum.id) + '/edit/',
+            follow=True)
+
+        # import pdb; pdb.set_trace()
+
+    def test_load_album_edit_page(self):
+        form_fields = ['title', 'description', 'published', 'photos', 'cover']
+        self.assertEqual(
+            self.edit.context['form'].Meta.fields, form_fields)
+
+    def test_edit_title(self):
+        form = self.edit.context['form']
+        data = form.initial
+        data['title'] = 'Update Title'
+        resp = self.c.post('/imager/album/add', data)
+        resp = self.edit
+        self.assertEqual(
+            resp.context['form'].initial['title'], 'Update Title')
+
+    def test_edit_desc(self):
+        form = self.edit.context['form']
+        data = form.initial
+        data['description'] = 'Update Desc'
+        resp = self.c.post('/imager/album/add', data)
+        resp = self.edit
+        self.assertEqual(
+            resp.context['form'].initial['description'], 'Update Desc')
+
+    def test_edit_published(self):
+        form = self.edit.context['form']
+        data = form.initial
+        data['published'] = 'Public'
+        resp = self.c.post('/imager/album/add', data)
+        resp = self.edit
+        self.assertEqual(
+            resp.context['form'].initial['published'], 'Public')
+
+    def test_edit_photos_in_album(self):
+        form = self.edit.context['form']
+        data = form.initial
+        data['photos'] = self.testphoto
+        resp = self.c.post('/imager/album/add', data)
+        resp = self.edit
+        self.assertEqual(
+            resp.context['form'].initial['photos'], self.testphoto)
+
+    def test_edit_album_cover(self):
+        form = self.edit.context['form']
+        data = form.initial
+        data['cover'] = self.testphoto
+        resp = self.c.post('/imager/album/add', data)
+        resp = self.edit
+        self.assertEqual(
+            resp.context['form'].initial['cover'], self.testphoto)
+
+    @classmethod
+    def tearDownClass(cls):
+        super(TestCase, cls)
+        cls.c = None
+        cls.res = None
+        cls.password = None
+        cls.testuser = None
+        models.User.objects.all().delete()
+        Album.objects.all().delete()
