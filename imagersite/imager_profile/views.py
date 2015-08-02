@@ -1,21 +1,33 @@
 from django.views.generic import TemplateView, ListView, DetailView, FormView
-from imager_images.models import Photos, Album
+from imager_images.models import Photos, Album, Face
 from .models import ImagerProfile
 from django.contrib.auth.models import User
 from .forms import ProfileSettingsForm
 
 
-def get_faces(path):
+def get_faces(photo):
     import Algorithmia
     import base64
     Algorithmia.apiKey = "Simple simWy1EsBB4ZucRa4q8DiPocne11"
 
-    with open(path, "rb") as img:
+    with open(photo.image.path, "rb") as img:
         b64 = base64.b64encode(img.read())
 
-    faces = Algorithmia.algo("/ANaimi/FaceDetection").pipe(b64)
+    result = Algorithmia.algo("/ANaimi/FaceDetection").pipe(b64)
 
-    print faces
+    faces = []
+    for rect in result:
+        face = Face()
+        face.photo = photo
+        face.name = '?'
+        face.x = rect['x']
+        face.y = rect['y']
+        face.width = rect['width']
+        face.height = rect['height']
+        face.save()
+        faces.append(face)
+
+    return faces
 
 
 class IndexView(TemplateView):
@@ -88,9 +100,11 @@ class PhotoDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
-        if self.detect:
-            get_faces(self.object.image.path)
 
+        if self.detect:
+            get_faces(self.object)
+
+        context['faces'] = self.object.faces.all()
         return context
 
 

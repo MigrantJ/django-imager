@@ -11,7 +11,7 @@
       <img src="{{ im.url }}">
     </figure>
   {% endthumbnail %}
-    {% if not detect %}
+    {% if not faces %}
       <a href="{% url 'detect_faces' object.id %}">Detect Faces</a>
     {% else %}
     <img src="{{ detect }}">
