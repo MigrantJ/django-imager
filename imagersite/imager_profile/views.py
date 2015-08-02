@@ -1,7 +1,6 @@
 from django.views.generic import TemplateView, ListView, DetailView, FormView
 from imager_images.models import Photos, Album, Face
 from .models import ImagerProfile
-from django.contrib.auth.models import User
 from .forms import ProfileSettingsForm
 
 

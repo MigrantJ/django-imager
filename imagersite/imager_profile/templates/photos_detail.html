@@ -36,7 +36,7 @@
     </figure>
   {% endthumbnail %}
     {% if not faces %}
-      <a href="{% url 'detect_faces' object.id %}">Detect Faces</a>
+      <a href="{% url 'detect_faces' object.id %}"><button type="">Detect Faces</button></a>
     {% else %}
     <img src="{{ detect }}">
     {% endif %}
