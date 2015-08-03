@@ -71,7 +71,7 @@
   <script type="text/javascript">
     FaceTagger.init({
       container: '#photo-container',
-      labelUrl: 'faces/{{ object.id }}/save',
+      labelUrl: '{% url "edit_face" object.id %}',
       csrf: '{{ csrf_token }}',
       originalWidth: {{ object.image.width }},
       originalHeight: {{ object.image.height }},
