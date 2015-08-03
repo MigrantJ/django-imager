@@ -19,7 +19,7 @@ urlpatterns = [
         name='profile_settings'),
     url(
         r'^images/photos/(?P<pk>\d+)/detect$',
-        views.PhotoDetailView.as_view(detect='hello'),
+        views.PhotoDetailView.as_view(detect=True),
         name='detect_faces'),
     url(r'^photo/(?P<pk>\d+)/face/edit/$',
         views.FaceEditView.as_view(),

@@ -122,7 +122,7 @@ class PhotoDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
 
-        if self.detect:
+        if self.detect and len(self.object.faces.all()) == 0:
             get_faces(self.object)
 
         context['faces'] = self.object.faces.all()
