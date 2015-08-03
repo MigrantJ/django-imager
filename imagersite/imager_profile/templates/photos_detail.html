@@ -19,12 +19,12 @@
     <section class="container offset-by-three column">
         <p>{{ object.title }}</p>
         <p>{{ object.description }}</p>
+        {% if not faces %}
+          <a href="{% url 'detect_faces' object.id %}"><button type="">Detect Faces</button></a>
+        {% endif %}
     </section>
     </div>
 </div>
-    {% if not faces %}
-      <a href="{% url 'detect_faces' object.id %}"><button type="">Detect Faces</button></a>
-    {% endif %}
 {% else %}
 <h1>{% trans "Please Login" %}</h1>
 {% endif %}
