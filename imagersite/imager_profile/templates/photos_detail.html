@@ -46,31 +46,37 @@
     }
     </style>
 {% if user.is_authenticated %}
-  <section class='container profile'>
-  {% thumbnail object.image "300x300" as im %} 
-    <figure class='img_detail offset-by-three column'>
-      <figcaption>{{ object.description }}</figcaption>
-      <img src="{{ im.url }}">
-    </figure>
-  {% endthumbnail %}
+
+<div>
+    <div class="row">
+    <container class='offset-by-three column' id='photo-container'>
+        <img class="img-responsive" src="{{ MEDIA_URL }}{{ object.image.url }}">
+    </container>
+    </div>
+    <div class="row">
+    <section class="container offset-by-three column">
+        <p>{{ object.title }}</p>
+        <p>{{ object.description }}</p>
+    </section>
+    </div>
+</div>
     {% if not faces %}
       <a href="{% url 'detect_faces' object.id %}"><button type="">Detect Faces</button></a>
     {% else %}
     <img src="{{ detect }}">
     {% endif %}
-  </section>
 {% else %}
 <h1>{% trans "Please Login" %}</h1>
 {% endif %}
   <script type="text/javascript">
     FaceTagger.init({
       container: '#photo-container',
-      labelUrl: '{{ object.id }}/faces',
+      labelUrl: 'faces/{{ object.id }}/save',
       csrf: '{{ csrf_token }}',
       originalWidth: {{ object.image.width }},
       originalHeight: {{ object.image.height }},
-      newWidth: 300,
-      newHeight: 184
+    newWidth: $("#photo-container img").width(),
+    newHeight: $("#photo-container img").height()
     });
 
     {% for f in faces %}
