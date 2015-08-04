@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.gis import forms as geoforms
 from .models import Photos, Album
 
 
@@ -18,3 +19,13 @@ class PhotoForm(forms.ModelForm):
     class Meta:
         model = Photos
         fields = ['image', 'title', 'description', 'published']
+
+
+class GeoForm(forms.ModelForm):
+    location = geoforms.PointField(
+        widget=geoforms.OpenLayersWidget(
+            attrs={'map_width': 300, 'map_height': 300}))
+
+    class Meta:
+        model = Photos
+        fields = ['location']
