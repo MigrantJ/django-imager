@@ -1,8 +1,54 @@
 from django.views.generic import TemplateView, ListView, DetailView, FormView
-from imager_images.models import Photos, Album
+from imager_images.models import Photos, Album, Face
 from .models import ImagerProfile
-from django.contrib.auth.models import User
 from .forms import ProfileSettingsForm
+from django.http import HttpResponse
+
+
+def get_faces(photo):
+    import Algorithmia
+    import base64
+    Algorithmia.apiKey = "Simple simWy1EsBB4ZucRa4q8DiPocne11"
+
+    with open(photo.image.path, "rb") as img:
+        b64 = base64.b64encode(img.read())
+
+    result = Algorithmia.algo("/ANaimi/FaceDetection").pipe(b64)
+
+    faces = []
+    for rect in result:
+        face = Face()
+        face.photo = photo
+        face.name = '?'
+        face.x = rect['x']
+        face.y = rect['y']
+        face.width = rect['width']
+        face.height = rect['height']
+        face.save()
+        faces.append(face)
+
+    return faces
+
+
+# def connections(request):
+#     conn = Face.objects.values('name').distinct()
+#     names = map(lambda x: x['name'], conn)
+
+#     for n in conn:
+#         n['imports'] = []
+
+#     for p in Photos.objects.all():
+#         faces = p.faces()
+#         for f in faces:
+#             all_names = map(lambda x: x.name, faces)
+#             curr_name = filter(lambda x: x['name'] == f.name, conn)[0]
+#             curr_name['imports'] += all_names
+
+#     for n in conn:
+#         n['imports'] = list(set(n['imports']))
+#         n['imports'].remove(n['name'])
+
+#     return JsonResponse(list(conn), safe=False)
 
 
 class IndexView(TemplateView):
@@ -71,9 +117,15 @@ class AlbumDetailListView(ListView):
 class PhotoDetailView(DetailView):
     template_name = 'photos_detail.html'
     model = Photos
+    detect = False
 
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
+
+        if self.detect and len(self.object.faces.all()) == 0:
+            get_faces(self.object)
+
+        context['faces'] = self.object.faces.all()
         return context
 
 
@@ -100,3 +152,16 @@ class ProfileSettingsView(FormView):
         profile.user = self.request.user
         profile.save()
         return super(ProfileSettingsView, self).form_valid(profile)
+
+
+class FaceEditView(TemplateView):
+    model = Face
+
+    def post(self, request, *args, **kwargs):
+        try:
+            face = Face.objects.get(id=request.POST['id'])
+            face.name = request.POST['name']
+            face.save()
+        except (TypeError, Photos.DoesNotExist, Face.DoesNotExist):
+            pass
+        return HttpResponse()

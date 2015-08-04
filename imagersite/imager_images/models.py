@@ -59,3 +59,20 @@ class Album(models.Model):
 
     def __str__(self):
         return self.title
+
+
+@python_2_unicode_compatible
+class Face(models.Model):
+    photo = models.ForeignKey(
+        Photos,
+        related_name='faces',
+        null=False,
+    )
+    x = models.IntegerField()
+    y = models.IntegerField()
+    width = models.IntegerField()
+    height = models.IntegerField()
+    name = models.CharField(max_length=256)
+
+    def __str__(self):
+        return 'Face: ' + self.photo.title + ' : ' + self.name
