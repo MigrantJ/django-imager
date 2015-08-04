@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 import factory
 from . import models
-from .models import Photos, Album
+from .models import Photos, Album, Face
 from django.contrib.auth.models import User
 from django.core.files import File
 from django.conf import settings
@@ -225,7 +225,7 @@ class TestPhotoDetailView(TestCase):
             username=cls.username,
             password=cls.password
         )
-        with open(settings.BASE_DIR + '/imager_images/static/img/jim_portrait.png', 'rb') as fh:
+        with open(settings.BASE_DIR + '/imager_images/static/img/testface.jpg', 'rb') as fh:
             cls.testphoto = Photos.objects.create(
                 user=cls.testuser,
                 title='test',
@@ -383,8 +383,6 @@ class TestAlbumEdit(TestCase):
             '/imager/album/' + str(cls.testalbum.id) + '/edit/',
             follow=True)
 
-        # import pdb; pdb.set_trace()
-
     def test_load_album_edit_page(self):
         form_fields = ['title', 'description', 'published', 'photos', 'cover']
         self.assertEqual(
@@ -444,3 +442,60 @@ class TestAlbumEdit(TestCase):
         cls.testuser = None
         models.User.objects.all().delete()
         Album.objects.all().delete()
+
+
+class TestFaceDetect(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super(TestCase, cls)
+        cls.username = 'person'
+        cls.password = 'password'
+        cls.testuser = models.User.objects.create_user(
+            username=cls.username,
+            password=cls.password
+        )
+        with open(settings.BASE_DIR + '/imager_images/static/img/testface.jpg', 'rb') as fh:
+            cls.testphoto = Photos.objects.create(
+                user=cls.testuser,
+                title='test',
+                description='test',
+                image=File(fh)
+            )
+        cls.c = Client()
+        cls.res = cls.c.get(
+            '/profile/images/photos/' + str(cls.testphoto.id) + '/detect',
+            follow=True)
+
+    def test_denied_if_no_login(self):
+        self.assertEqual(self.res.status_code, 200)
+        self.assertIn('Please Login', self.res.content)
+
+    def test_allowed_if_login(self):
+        assert self.c.login(
+            username=self.username,
+            password=self.password
+        )
+        self.res = self.c.get(
+            '/profile/images/photos/' + str(self.testphoto.id) + '/detect',
+            follow=True)
+        self.assertEqual(self.res.status_code, 200)
+        self.assertIn(self.username, self.res.content)
+
+    def test_face_detected(self):
+        self.assertGreater(len(Face.objects.all()), 0)
+
+    def test_face_rename(self):
+        self.res = self.c.post(
+            '/profile/photo/' + str(self.testphoto.id) + '/face/edit/',
+            {'id': 1, 'name': 'test'}
+        )
+        self.assertEqual(self.res.status_code, 200)
+        face = Face.objects.get(id=1)
+        self.assertEqual(face.name, 'test')
+
+    @classmethod
+    def tearDownClass(cls):
+        super(TestCase, cls)
+        Photos.objects.all().delete()
+        models.User.objects.all().delete()
