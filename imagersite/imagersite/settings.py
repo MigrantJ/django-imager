@@ -24,7 +24,7 @@ STATIC_ROOT = os.environ.get('STATIC_ROOT', os.path.join(BASE_DIR, 'static'))
 
 # Media File Handling
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.environ.get('MEDIA_URL', os.path.join(BASE_DIR, 'media'))
+MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, 'media'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY', None)
@@ -38,6 +38,7 @@ DEFAULT_FROM_USER = EMAIL_HOST_USER
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', False)
+THUMBNAIL_DEBUG = True
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split()
 
