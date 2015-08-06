@@ -3,6 +3,7 @@ dj-database-url==0.3.0
 Django==1.8
 django-bootstrap3==6.1.0
 django-registration-redux==1.2
+djangorestframework==3.2.0
 factory-boy==2.5.2
 gnureadline==6.3.3
 ipython==3.2.1
