@@ -11,18 +11,14 @@ header {
   font-size: 1.5rem;
 }
 
-/*form {
-  margin-left: 5%;
-}*/
-
 .settings p {
   display: inline-table;
 }
 
-img {
+/*img {
   max-width: 100%;
   border-radius: 1rem;
-}
+}*/
 
 .user_nav ul li {
   list-style: none;
@@ -41,7 +37,6 @@ figure img {
 }
 
 figcaption {
-  /*text-align: center;*/
   font-family: fantasy;
   font-size: xx-large;
   font-weight: bold;
@@ -81,11 +76,11 @@ figcaption {
   margin-bottom: 2%;
 }
 
-
-@media(max-width: 400px) {
-  
-}
-
 #map-canvas {
   height: 500px
+}
+
+#id_div_location_map {
+  height: 200px;
+  width: 200px;
 }
