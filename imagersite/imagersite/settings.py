@@ -59,9 +59,11 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'imager_profile',
     'imager_images',
+    'imager_api',
     'bootstrap3',
     'registration',
-    'sorl.thumbnail'
+    'sorl.thumbnail',
+    'rest_framework'
 )
 
 SITE_ID = 1
