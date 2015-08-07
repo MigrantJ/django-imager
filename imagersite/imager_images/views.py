@@ -1,7 +1,6 @@
 from .models import Photos, Album
 from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView, UpdateView, FormView
-from .forms import AlbumForm, PhotoForm
+from django.views.generic.edit import CreateView, UpdateView
 
 
 class IndexView(TemplateView):
@@ -42,6 +41,16 @@ class AlbumCreateView(CreateView):
     template_name = 'album_form.html'
     success_url = '/profile/'
 
+    def get_form(self):
+        form = super(AlbumCreateView, self).get_form()
+        form.fields['photos'].queryset = Photos.objects.filter(
+            user=self.request.user
+        )
+        form.fields['cover'].queryset = Photos.objects.filter(
+            user=self.request.user
+        )
+        return form
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(AlbumCreateView, self).form_valid(form)
@@ -52,3 +61,13 @@ class AlbumEditView(UpdateView):
     fields = ['title', 'description', 'published', 'photos', 'cover']
     template_name = 'album_form.html'
     success_url = '/profile/'
+
+    def get_form(self):
+        form = super(AlbumEditView, self).get_form()
+        form.fields['photos'].queryset = Photos.objects.filter(
+            user=self.request.user
+        )
+        form.fields['cover'].queryset = Photos.objects.filter(
+            user=self.request.user
+        )
+        return form
