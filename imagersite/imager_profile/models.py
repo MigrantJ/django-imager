@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
@@ -23,9 +24,9 @@ class ImagerProfile(models.Model):
         related_name="profile",
         null=False
     )
-    fav_camera = models.CharField(max_length=256)
-    address = models.TextField()
-    url = models.URLField()
+    fav_camera = models.CharField(max_length=256, blank=True)
+    address = models.TextField(blank=True)
+    url = models.URLField(blank=True)
     photo_type = models.CharField(max_length=1,
                                   choices=PHOTO_TYPES,
                                   default='N')

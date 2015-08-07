@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <section class='img_cover'>
+    {% if photo %}
+      <img src="{{ MEDIA_ROOT }}{{ photo.image.url }}" alt="Cover Photo">
+    {% else %}
+      <img src="http://picsportray.com/wp-content/uploads/2015/06/funny-dog-i-dunno-lol.jpg" alt="">
+    {% endif %}
+  </section>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load i18n %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<section class='container profile'>
+  {% for album in object_list %}
+    {% thumbnail album.cover.image "200x200" as im %}
+    <a href="{% url 'albums_detail' album.id %}">
+      <img src="{{ im.url }}">
+    </a></br>
+    <a href="{% url 'edit_album' album.id %}"><button type="">Edit</button></a>
+    {% endthumbnail %}
+  {% empty %}
+    <h1>{% trans 'No Albums! Go add some, you fool!!!' %}</h1>
+  {% endfor %}  
+</section>
+{% else %}
+<h1>{% trans "Please Login" %}</h1>
+{% endif %}
+{% endblock %}

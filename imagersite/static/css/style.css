@@ -1,0 +1,87 @@
+main, footer {
+  margin: 1.5%;
+}
+
+header {
+  background-color: black;
+  color: gray;
+  text-decoration: none;
+  text-indent: 1.5%;
+  padding: 1% 0;
+  font-size: 1.5rem;
+}
+
+/*form {
+  margin-left: 5%;
+}*/
+
+.settings p {
+  display: inline-table;
+}
+
+img {
+  max-width: 100%;
+  border-radius: 1rem;
+}
+
+.user_nav ul li {
+  list-style: none;
+}
+
+figure {
+  margin: 0 auto;
+  display: inline-block;
+  min-width: 33%;
+}
+
+figure img {
+  display: inline;
+  margin: 5% 5%;
+  box-shadow: 10px 5px 5px black;
+}
+
+figcaption {
+  /*text-align: center;*/
+  font-family: fantasy;
+  font-size: xx-large;
+  font-weight: bold;
+}
+
+.login_form {
+  background-color: rgb(202, 202, 202);
+  border-radius: 1rem;
+  margin-left: 2%;
+}
+
+#id_password, #id_username {
+  max-width: 95%;
+}
+
+#content {
+  display: flex;
+}
+
+.helptext, .notifications p {
+  display: block;
+  margin-left: .5%;
+  font-size: .5rem;
+}
+
+.notifications p {
+  margin-left: 5%;
+}
+
+.profile {
+  background-color: rgb(202, 202, 202);
+  border-radius: 2rem;
+  padding-left: 2.5%;
+}
+
+.user_header {
+  margin-bottom: 2%;
+}
+
+
+@media(max-width: 400px) {
+  
+}

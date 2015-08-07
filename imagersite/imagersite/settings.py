@@ -12,19 +12,38 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.8/howto/static-files/
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.environ.get('STATIC_ROOT', os.path.join(BASE_DIR, 'static'))
+
+# Media File Handling
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, 'media'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '!syrw2^^&&f)64%yu3mb041ij$&z2=livnhz^*2zik!b=_e6-o'
+SECRET_KEY = os.environ.get('SECRET_KEY', None)
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_USER = EMAIL_HOST_USER
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', False)
+THUMBNAIL_DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split()
+
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY', None)
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID', None)
 
 
 # Application definition
@@ -36,9 +55,26 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.gis',
     'imager_profile',
-    'imager_images'
+    'imager_images',
+    'imager_api',
+    'bootstrap3',
+    'registration',
+    'sorl.thumbnail',
+    'rest_framework'
 )
+
+SITE_ID = 1
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND',
+                               'django.core.mail.backends.smtp.EmailBackend'
+                               )
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_EMAIL_HTML = False
+LOGIN_REDIRECT_URL = '/profile/'
+ROOT_URLCONF = 'imagersite.urls'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -51,12 +87,14 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-ROOT_URLCONF = 'imagersite.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'imager_images/templates'),
+            os.path.join(BASE_DIR, 'imager_profile/templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,6 +107,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'imagersite.wsgi.application'
 
 
@@ -76,10 +115,17 @@ WSGI_APPLICATION = 'imagersite.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    # 'default': {
+    #     'ENGINE': 'django.contrib.gis.db.backends.postgis',
+    #     'NAME': 'imager',
+    #     'USER': '',
+    #     'PASSWORD': '',
+    #     'HOST': '127.0.0.1',
+    #     'PORT': '5432',
+    # }
+    'default': dj_database_url.config(
+        default='sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+    )
 }
 
 
@@ -88,22 +134,10 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = os.environ.get('TIME_ZONE', 'UTC')
 
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.8/howto/static-files/
-
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-
-# Media File Handling
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

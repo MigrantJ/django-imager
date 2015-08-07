@@ -1,6 +1,8 @@
+from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
+from django.contrib.gis.db import models as geomodels
 
 PUBLISHED_CHOICES = (
     ('private', 'private'),
@@ -26,6 +28,9 @@ class Photos(models.Model):
                                  choices=PUBLISHED_CHOICES,
                                  default='private')
 
+    location = geomodels.PointField(geography=True, null=True, blank=True)
+    objects = geomodels.GeoManager()
+
     def __str__(self):
         return self.title
 
@@ -39,10 +44,13 @@ class Album(models.Model):
     photos = models.ManyToManyField(
         Photos,
         related_name='albums',
+        blank=True
     )
     cover = models.ForeignKey(
         Photos,
-        related_name='cover_for'
+        related_name='cover_for',
+        null=True,
+        blank=True
     )
     title = models.CharField(max_length=256)
     description = models.TextField()
@@ -55,3 +63,20 @@ class Album(models.Model):
 
     def __str__(self):
         return self.title
+
+
+@python_2_unicode_compatible
+class Face(models.Model):
+    photo = models.ForeignKey(
+        Photos,
+        related_name='faces',
+        null=False,
+    )
+    x = models.IntegerField()
+    y = models.IntegerField()
+    width = models.IntegerField()
+    height = models.IntegerField()
+    name = models.CharField(max_length=256)
+
+    def __str__(self):
+        return 'Face: ' + self.photo.title + ' : ' + self.name

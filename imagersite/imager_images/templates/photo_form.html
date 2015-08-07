@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block extra_head %}
+  {{ form.media }}
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<section class='container profile'>
+  <form action="" method="post" accept-charset="utf-8" enctype="multipart/form-data">
+  {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" name="add" value="Add">
+  </form>
+</section>
+{% else %}
+  <h1>Please Login.</h1>
+{% endif %}
+{% endblock %}

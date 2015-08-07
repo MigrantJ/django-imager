@@ -1,11 +1,5 @@
-# Migrations
-migrations/*
-imager_images/migrations/*
-imager_profile/migrations/*
-
-
 # Media folder
-media/*
+media/
 
 # SQLite DB
 *.sqlite3

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% load thumbnail %}
+{% load i18n %}
+
+{% block content %}
+{% if user.is_authenticated %}
+  <section class='profile container'>
+    <section class='container'>
+      <section class='user_header one-half column'>
+      {% if user.first_name %}
+        <h1>{% trans "Welcome" %} {{ user.first_name }}</h1>
+      {% else %}
+        <h1>{% trans "Welcome" %} {{ user.username }}</h1>
+      {% endif %}
+        <p>{% trans 'Last Login: ' %}{{ user.last_login }}</p>
+        <p>{% trans 'Member Since: '%}{{ user.date_joined }}</p>
+      </section>
+      <section class='user_nav one-half column container'>
+        <ul class='one-half column'>
+        {% thumbnail photo.image "200x100" as im %}
+          {% csrf_token %}
+          <li>
+            <p>Library</p>
+          </li>
+          <li>
+            <a href="images/library" title="">
+              <img src="{{ MEDIA_ROOT }}{{ im.url }}" alt="">
+            </a>
+          </li>
+        </ul>
+        {% endthumbnail %}
+        {% thumbnail album.cover.image "200x100" as alb %}
+          {% csrf_token %}
+         <ul class='one-half column'> 
+          <li>
+            <p>Albums</p>
+          </li>
+          <li>
+            <a href="images/albums" title="">
+              <img src="{{ MEDIA_ROOT }}{{ alb.url }}" alt="">
+            </a>
+          </li>
+        {% endthumbnail %}
+        </ul>
+      </section>
+    </section>
+    <section class='container'>
+      <section class='user_profile one-half column'>
+      <h2>User Profile Info</h2>
+        <ul>
+          <li>Favorite Camera: {{ user.profile.fav_camera }}</li>
+          <li>Address: {{ user.profile.address }}</li>
+          <li>Personal Website: 
+              <a href='{{ user.profile.url }}'>{{ user.profile.url }}</a>
+          </li>
+          <li>Photography Type: {{ user.profile.get_photo_type_display }}</li>
+        </ul>
+      </section>
+      <aside class='user_stats one-half column'>
+        <h2>User Stats</h2>  
+        <ul>
+          <li>Total Photos: {{ user.photos_set.count }}</li>
+          <li>Total Albums: {{ user.album_set.count }}</li>
+          <li>Last Photo Posted: </li>
+        </ul>
+      </aside>
+    </section>
+    <nav class='container'>
+      <a href='../imager/photo/add/'><button type="">{% trans 'New Photo' %}</button></a>
+      <a href='../imager/album/add/'><button type="">{% trans 'New Album' %}</button></a>
+      <a href="/profile/settings/" title=""><button type="">{% trans 'Edit Profile' %}</button></a>
+    </nav>
+  </section>
+{% else %}
+<h1>{% trans "Please Login" %}</h1>
+{% endif %}
+{% endblock %}
