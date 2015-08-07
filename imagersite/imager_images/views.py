@@ -58,8 +58,8 @@ class PhotoFormView(FormView):
         except (KeyError, Photos.DoesNotExist):
             return PhotoForm(**self.get_form_kwargs())
 
-    def photo_form_valid(self, form):
+    def form_valid(self, form):
         photo = form.save(commit=False)
         photo.user = self.request.user
         photo.save()
-        return super(PhotoFormView, self).photo_form_valid(photo)
+        return super(PhotoFormView, self).form_valid(photo)
