@@ -2,6 +2,7 @@ from django.views.generic import TemplateView, ListView, DetailView, FormView
 from imager_images.models import Photos, Album, Face
 from .models import ImagerProfile
 from .forms import ProfileSettingsForm
+from django.http import HttpResponse
 
 
 def get_faces(photo):
@@ -121,7 +122,7 @@ class PhotoDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(DetailView, self).get_context_data(**kwargs)
 
-        if self.detect:
+        if self.detect and len(self.object.faces.all()) == 0:
             get_faces(self.object)
 
         context['faces'] = self.object.faces.all()
@@ -151,3 +152,16 @@ class ProfileSettingsView(FormView):
         profile.user = self.request.user
         profile.save()
         return super(ProfileSettingsView, self).form_valid(profile)
+
+
+class FaceEditView(TemplateView):
+    model = Face
+
+    def post(self, request, *args, **kwargs):
+        try:
+            face = Face.objects.get(id=request.POST['id'])
+            face.name = request.POST['name']
+            face.save()
+        except (TypeError, Photos.DoesNotExist, Face.DoesNotExist):
+            pass
+        return HttpResponse()

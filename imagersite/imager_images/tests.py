@@ -1,8 +1,10 @@
 from django.test import TestCase, Client
 import factory
 from . import models
-from .models import Photos, Album
+from .models import Photos, Album, Face
 from django.contrib.auth.models import User
+from django.core.files import File
+from django.conf import settings
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -30,57 +32,63 @@ class TestPhoto(TestCase):
     @classmethod
     def setUpClass(cls):
         super(TestCase, cls)
-        cls.user1_photo = PhotoFactory.create()
-        cls.user1_photo = PhotoFactory.create()
+        cls.username = 'person'
+        cls.password = 'password'
+        cls.testuser = models.User.objects.create_user(
+            username=cls.username,
+            password=cls.password
+        )
+        cls.testphoto = Photos.objects.create(
+            user=cls.testuser
+        )
 
     def test_photo_belongs_to_unique_user(self):
-        assert self.user1_photo.user.username == 'user1'
+        self.assertEqual(self.testphoto.user.username, self.username)
 
     def test_new_empty_description(self):
-        assert self.user1_photo.description == ''
+        self.assertEqual(self.testphoto.description, '')
 
     def test_new_empty_title(self):
-        assert self.user1_photo.title == ''
+        self.assertEqual(self.testphoto.title, '')
 
     def test_photo_access(self):
-        assert self.user1_photo.published == 'private'
-        self.user1_photo.published = 'public'
-        assert self.user1_photo.published == 'public'
+        self.assertEqual(self.testphoto.published, 'private')
 
     @classmethod
     def tearDownClass(cls):
         super(TestCase, cls)
-        users = User.objects.all()
-        non_super = users[1:]
-        for u in non_super:
-            u.delete()
-        Photos.objects.all().delete()
+        models.Photos.objects.all().delete()
+        models.User.objects.all().delete()
 
 
 class TestAlbum(TestCase):
     @classmethod
     def setUpClass(cls):
         super(TestCase, cls)
-        cls.user1_photo = PhotoFactory.create()
-        cls.user1_photo = PhotoFactory.create()
-        cls.user1_album = AlbumFactory.create()
+        cls.username = 'person'
+        cls.password = 'password'
+        cls.testuser = models.User.objects.create_user(
+            username=cls.username,
+            password=cls.password
+        )
+        cls.testalbum = Album.objects.create(
+            user=cls.testuser
+        )
 
     def test_user_album_exists(self):
-        assert self.user1_album.user
+        self.assertIsNotNone(self.testalbum.user)
 
     def test_new_empty_title(self):
-        assert self.user1_album.title == ''
+        self.assertEqual(self.testalbum.title, '')
 
     def test_new_empty_desc(self):
-        assert self.user1_album.description == ''
+        self.assertEqual(self.testalbum.description, '')
 
     @classmethod
     def tearDownClass(cls):
         super(TestCase, cls)
-        users = User.objects.all()
-        non_super = users[1:]
-        for u in non_super:
-            u.delete()
+        models.Album.objects.all().delete()
+        models.User.objects.all().delete()
 
 
 class TestAlbumListView(TestCase):
@@ -217,11 +225,13 @@ class TestPhotoDetailView(TestCase):
             username=cls.username,
             password=cls.password
         )
-        cls.testphoto = Photos.objects.create(
-            user=cls.testuser,
-            title='test',
-            description='test'
-        )
+        with open(settings.BASE_DIR + '/imager_images/static/img/testface.jpg', 'rb') as fh:
+            cls.testphoto = Photos.objects.create(
+                user=cls.testuser,
+                title='test',
+                description='test',
+                image=File(fh)
+            )
         cls.c = Client()
         cls.res = cls.c.get(
             '/profile/images/photos/' + str(Photos.objects.all()[0].id),
@@ -373,8 +383,6 @@ class TestAlbumEdit(TestCase):
             '/imager/album/' + str(cls.testalbum.id) + '/edit/',
             follow=True)
 
-        # import pdb; pdb.set_trace()
-
     def test_load_album_edit_page(self):
         form_fields = ['title', 'description', 'published', 'photos', 'cover']
         self.assertEqual(
@@ -434,3 +442,60 @@ class TestAlbumEdit(TestCase):
         cls.testuser = None
         models.User.objects.all().delete()
         Album.objects.all().delete()
+
+
+class TestFaceDetect(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super(TestCase, cls)
+        cls.username = 'person'
+        cls.password = 'password'
+        cls.testuser = models.User.objects.create_user(
+            username=cls.username,
+            password=cls.password
+        )
+        with open(settings.BASE_DIR + '/imager_images/static/img/testface.jpg', 'rb') as fh:
+            cls.testphoto = Photos.objects.create(
+                user=cls.testuser,
+                title='test',
+                description='test',
+                image=File(fh)
+            )
+        cls.c = Client()
+        cls.res = cls.c.get(
+            '/profile/images/photos/' + str(cls.testphoto.id) + '/detect',
+            follow=True)
+
+    def test_denied_if_no_login(self):
+        self.assertEqual(self.res.status_code, 200)
+        self.assertIn('Please Login', self.res.content)
+
+    def test_allowed_if_login(self):
+        assert self.c.login(
+            username=self.username,
+            password=self.password
+        )
+        self.res = self.c.get(
+            '/profile/images/photos/' + str(self.testphoto.id) + '/detect',
+            follow=True)
+        self.assertEqual(self.res.status_code, 200)
+        self.assertIn(self.username, self.res.content)
+
+    def test_face_detected(self):
+        self.assertGreater(len(Face.objects.all()), 0)
+
+    def test_face_rename(self):
+        self.res = self.c.post(
+            '/profile/photo/' + str(self.testphoto.id) + '/face/edit/',
+            {'id': 1, 'name': 'test'}
+        )
+        self.assertEqual(self.res.status_code, 200)
+        face = Face.objects.get(id=1)
+        self.assertEqual(face.name, 'test')
+
+    @classmethod
+    def tearDownClass(cls):
+        super(TestCase, cls)
+        Photos.objects.all().delete()
+        models.User.objects.all().delete()

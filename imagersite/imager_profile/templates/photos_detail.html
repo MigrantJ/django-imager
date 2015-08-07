@@ -7,44 +7,6 @@
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
     <script type="text/javascript" src="//algorithmia.com/v1/clients/js/algorithmia-0.2.0.js"></script>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/sweetalert/1.0.1/sweetalert-dev.js"></script>
-
-    <style>
-    #photo-container
-    {
-        position: relative;
-        text-align: center;
-    }
-    #photo-container img
-    {
-        float: left;
-    }
-    .facelabel
-    {
-        position: absolute;
-        cursor: pointer;
-        text-align: left;
-    }
-    .facelabel .border
-    {
-        border: solid 4px #FFFF00;
-    }
-    .facelabel .name
-    {
-        display: inline-block;
-        margin-top: 5px;
-        font-size: 12px;
-        padding: 6px;
-        color: #444;
-        background-color: #FFFF00
-    }
-    .delete-btn
-    {
-        position: absolute;
-        right: 0px;
-        bottom: -20px;
-        font-size: 12px;
-    }
-    </style>
 {% if user.is_authenticated %}
 
 <div>
@@ -57,21 +19,19 @@
     <section class="container offset-by-three column">
         <p>{{ object.title }}</p>
         <p>{{ object.description }}</p>
+        {% if not faces %}
+          <a href="{% url 'detect_faces' object.id %}"><button type="">Detect Faces</button></a>
+        {% endif %}
     </section>
     </div>
 </div>
-    {% if not faces %}
-      <a href="{% url 'detect_faces' object.id %}"><button type="">Detect Faces</button></a>
-    {% else %}
-    <img src="{{ detect }}">
-    {% endif %}
 {% else %}
 <h1>{% trans "Please Login" %}</h1>
 {% endif %}
   <script type="text/javascript">
     FaceTagger.init({
       container: '#photo-container',
-      labelUrl: 'faces/{{ object.id }}/save',
+      labelUrl: '{% url "edit_face" object.id %}',
       csrf: '{{ csrf_token }}',
       originalWidth: {{ object.image.width }},
       originalHeight: {{ object.image.height }},
