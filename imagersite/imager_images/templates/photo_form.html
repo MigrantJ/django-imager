@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block extra_head %}
+  {{ form.media }}
+{% endblock %}
+
 {% block content %}
 {% if user.is_authenticated %}
 <section class='container profile'>

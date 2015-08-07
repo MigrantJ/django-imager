@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^profile/', include('imager_profile.urls')),
     url(r'^accounts/', include('registration.backends.default.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^api/v1/', include('imager_api.urls'))
 ]
 
 
