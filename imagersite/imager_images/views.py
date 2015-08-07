@@ -1,6 +1,6 @@
 from .models import Photos, Album
 from django.views.generic import TemplateView
-from django.views.generic import FormView
+from django.views.generic.edit import CreateView, UpdateView, FormView
 from .forms import AlbumForm, PhotoForm
 
 
@@ -43,30 +43,19 @@ class AlbumFormView(FormView):
         return super(AlbumFormView, self).form_valid(album)
 
 
-class PhotoFormView(FormView):
+class PhotoCreateView(CreateView):
+    model = Photos
+    fields = ['image', 'title', 'description', 'published', 'location']
     template_name = 'photo_form.html'
-    form_class = PhotoForm
     success_url = '/profile/images/library'
 
-    def get_form(self, form_class=PhotoForm):
-        try:
-            photo = Photos.objects.get(
-                user=self.request.user,
-                pk=self.kwargs['pk']
-            )
-            return PhotoForm(instance=photo, **self.get_form_kwargs())
-        except (KeyError, Photos.DoesNotExist):
-            return PhotoForm(**self.get_form_kwargs())
-
     def form_valid(self, form):
-        try:
-            form.instance.id = self.kwargs['pk']
-            form.save()
-            print "going to edit"
-            return super(PhotoFormView, self).form_valid(form)
-        except:
-            photo = form.save(commit=False)
-            photo.user = self.request.user
-            photo.save()
-            return super(PhotoFormView, self).form_valid(photo)
+        form.instance.user = self.request.user
+        return super(PhotoCreateView, self).form_valid(form)
 
+
+class PhotoEditView(UpdateView):
+    model = Photos
+    fields = ['image', 'title', 'description', 'published', 'location']
+    template_name = 'photo_form.html'
+    success_url = '/profile/images/library'
