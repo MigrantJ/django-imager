@@ -8,10 +8,7 @@ class AlbumForm(forms.ModelForm):
         fields = ['title', 'description', 'published', 'photos', 'cover']
 
     def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop("request")
         super(AlbumForm, self).__init__(*args, **kwargs)
-        self.fields['photos'].queryset = Photos.objects.filter(
-            user=self.request.user)
 
 
 class PhotoForm(forms.ModelForm):
