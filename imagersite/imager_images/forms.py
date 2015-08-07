@@ -18,10 +18,10 @@ class AlbumForm(forms.ModelForm):
 class PhotoForm(forms.ModelForm):
     class Meta:
         model = Photos
-        fields = ['image', 'title', 'description', 'published']
+        fields = ['image', 'title', 'description', 'published', 'location']
 
 
-class GeoForm(forms.ModelForm):
+class GeoForm(geoforms.Form):
     location = geoforms.PointField(
         widget=geoforms.OpenLayersWidget(
             attrs={'map_width': 300, 'map_height': 300}))
