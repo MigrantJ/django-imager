@@ -45,7 +45,6 @@ class AlbumFormView(FormView):
 
 class PhotoFormView(FormView):
     template_name = 'photo_form.html'
-    # form_classes = {'photo': PhotoForm, 'location': GeoForm}
     form_class = PhotoForm
     success_url = '/profile/images/library'
 
@@ -64,24 +63,3 @@ class PhotoFormView(FormView):
         photo.user = self.request.user
         photo.save()
         return super(PhotoFormView, self).photo_form_valid(photo)
-
-    # def get_location_form(self, form_class=GeoForm):
-    #     try:
-    #         photo = Photos.objects.location.get(
-    #             user=self.request.user,
-    #             pk=self.kwargs['pk']
-    #         )
-    #         return GeoForm(instance=photo, **self.get_form_kwargs())
-    #     except (KeyError, Photos.DoesNotExist):
-    #         return GeoForm(**self.get_form_kwargs())
-
-    # def get_form_kwargs(self):
-    #     kwargs = super(PhotoFormView, self).get_form_kwargs()
-    #     kwargs['request'] = self.request
-    #     return kwargs
-
-    # def location_form_valid(self, form):
-    #     location = form.save(commit=False)
-    #     location.user = self.request.user
-    #     location.save()
-    #     return super(PhotoFormView, self).location_form_valid(location)
