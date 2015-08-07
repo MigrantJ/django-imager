@@ -85,3 +85,7 @@ figcaption {
 @media(max-width: 400px) {
   
 }
+
+#map-canvas {
+  height: 500px
+}
