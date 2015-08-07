@@ -59,7 +59,14 @@ class PhotoFormView(FormView):
             return PhotoForm(**self.get_form_kwargs())
 
     def form_valid(self, form):
-        photo = form.save(commit=False)
-        photo.user = self.request.user
-        photo.save()
-        return super(PhotoFormView, self).form_valid(photo)
+        try:
+            form.instance.id = self.kwargs['pk']
+            form.save()
+            print "going to edit"
+            return super(PhotoFormView, self).form_valid(form)
+        except:
+            photo = form.save(commit=False)
+            photo.user = self.request.user
+            photo.save()
+            return super(PhotoFormView, self).form_valid(photo)
+
